@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="General">
+        <menu>
+            <item
+                android:id="@+id/diary_lock"
+                android:icon="@drawable/ic_baseline_lock_24"
+                android:title="Diary Lock" />
+            <item
+                android:id="@+id/notifications"
+                android:icon="@drawable/ic_baseline_notifications_active_24"
+                android:title="Notifications" />
+            <item
+                android:id="@+id/darkmode"
+                android:icon="@drawable/ic_baseline_nights_stay_24"
+                android:title="Dark Mode" />
+        </menu>
+    </item>
+    <item android:title="Support">
+        <menu>
+            <item
+                android:id="@+id/share_app"
+                android:icon="@drawable/ic_baseline_share_24"
+                android:title="Share App" />
+
+            <item
+                android:id="@+id/about_us"
+                android:icon="@drawable/ic_baseline_info_24"
+                android:title="About Us" />
+        </menu>
+    </item>
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/login"
+                android:icon="@drawable/ic_baseline_person_outline_24"
+                android:title="Login" />
+
+            <item
+                android:id="@+id/sync_account"
+                android:icon="@drawable/ic_baseline_sync_24"
+                android:title="Sync Account" />
+
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_baseline_login_24"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

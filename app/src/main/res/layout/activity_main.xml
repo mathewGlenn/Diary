@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.drawerlayout.widget.DrawerLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/draweLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".entries.EntriesList">
+
+    <ImageButton
+        android:id="@+id/side_menu"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/transparrent"
+        android:scaleType="fitXY"
+        android:src="@drawable/side_menu_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Glenn's Diary"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:id="@+id/user_name_diary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/side_menu"
+        app:layout_constraintBottom_toBottomOf="@id/side_menu" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="45dp"
+        android:id="@+id/btn_heart"
+        android:layout_height="45dp"
+        android:theme="@style/Theme.WhiteActionBar"
+        android:src="@drawable/heart"
+        app:fabCustomSize="45dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/addEntry"
+        app:layout_constraintEnd_toStartOf="@id/addEntry"
+        app:layout_constraintTop_toTopOf="@id/addEntry"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="45dp"
+        android:id="@+id/btn_profile"
+        android:layout_height="45dp"
+        android:theme="@style/Theme.WhiteActionBar"
+        android:src="@drawable/person"
+        app:fabCustomSize="45dp"
+        android:layout_marginStart="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/addEntry"
+        app:layout_constraintStart_toEndOf="@id/addEntry"
+        app:layout_constraintTop_toTopOf="@id/addEntry"/>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:contentDescription="@string/add_entry"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/entrieslist"
+        android:layout_marginTop="50dp"
+        android:scrollbars="vertical"
+        android:paddingBottom="100dp"
+        android:clipToPadding="false" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/nav_menu"
+        app:headerLayout="@layout/nav_header"
+        android:fitsSystemWindows="true"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>
