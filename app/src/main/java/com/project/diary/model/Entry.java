@@ -2,15 +2,14 @@ package com.project.diary.model;
 
 public class Entry {
 
-    private String title, content, date, time;
+    private String title, content, date;
 
     public Entry(){}
 
-    public Entry(String nTitle, String nContent, String nDate, String nTime){
+    public Entry(String nTitle, String nContent, String nDate){
         this.title = nTitle;
         this.content = nContent;
         this.date = nDate;
-        this.time = nTime;
     }
 
     public String getTitle() {
@@ -37,11 +36,4 @@ public class Entry {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
 }

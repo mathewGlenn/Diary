@@ -76,11 +76,9 @@ public class EntriesList extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, int i, @NonNull Entry entry) {
 
-                Calendar calendar;
                 SimpleDateFormat dateFormat, timeFormat;
 
-                calendar = Calendar.getInstance();
-                dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                dateFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
 
                 String date = entry.getDate();
 
@@ -113,7 +111,6 @@ public class EntriesList extends AppCompatActivity {
                         i.putExtra("title", entry.getTitle());
                         i.putExtra("content", entry.getContent());
                         i.putExtra("date", entry.getDate());
-                        i.putExtra("time", entry.getTime());
                         i.putExtra("entryID", docID);
                         startActivity(i);
                     }

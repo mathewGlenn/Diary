@@ -1,7 +1,11 @@
 package com.project.diary.entries;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,15 +19,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.diary.databinding.ActivityAddEntryBinding;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class AddEntry extends AppCompatActivity {
 
-    String date, time;
+    //for date time picker
+    private int dYear, dMonth, dDay, tHour, tMinute;
+
     FirebaseFirestore firestore;
     FirebaseUser user;
     private ActivityAddEntryBinding binding;
@@ -40,15 +49,24 @@ public class AddEntry extends AppCompatActivity {
 
 
         Calendar calendar;
-        SimpleDateFormat dateFormat, timeFormat;
+        SimpleDateFormat dateFormat;
 
         calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        timeFormat = new SimpleDateFormat("h:mm a");
+        dateFormat = new SimpleDateFormat("MMM dd, yyyy  h:mm a", java.util.Locale.getDefault());
 
 
-        date = dateFormat.format(calendar.getTime());
-        time = timeFormat.format(calendar.getTime());
+        String date = dateFormat.format(calendar.getTime());
+
+        try {
+            Date d_date = dateFormat.parse(date);
+            DateFormat dateOnly = new SimpleDateFormat("E, dd MMM yyyy");
+            DateFormat timeOnly = new SimpleDateFormat("h:mm a");
+
+            binding.txtTime.setText(timeOnly.format(d_date));
+            binding.txtDate.setText(dateOnly.format(d_date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +74,13 @@ public class AddEntry extends AppCompatActivity {
             public void onClick(View v) {
 
 
+                String entry_title, entry_content, entry_date, entry_time, entry_date_time;
 
-                String entry_title, entry_content;
                 entry_title = binding.entryTitle.getText().toString();
                 entry_content = binding.entryContent.getText().toString();
+                entry_date = binding.txtDate.getText().toString();
+                entry_time = binding.txtTime.getText().toString();
+                entry_date_time = entry_date.concat(" " + entry_time);
 
 
                 if (entry_content.isEmpty()) {
@@ -70,14 +91,14 @@ public class AddEntry extends AppCompatActivity {
                 //save note to firestore
                 //notes collection >> multiple notes
 
+
                 binding.progress.setVisibility(View.VISIBLE);
 
                 DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
                 Map<String, Object> entry = new HashMap<>();
                 entry.put("title", entry_title);
                 entry.put("content", entry_content);
-                entry.put("date", date);
-                entry.put("time", time);
+                entry.put("date", entry_date_time);
 
                 reference.set(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -94,5 +115,76 @@ public class AddEntry extends AppCompatActivity {
                 });
             }
         });
+
+        //Change the time
+        binding.txtTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                //get current time
+                tHour = c.get(Calendar.HOUR_OF_DAY);
+                tMinute = c.get(Calendar.MINUTE);
+
+                //Lauch the time picker dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddEntry.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String format;
+                        if (hourOfDay == 0) {
+                            hourOfDay += 12;
+                            format = "AM";
+                        } else if (hourOfDay == 12) {
+                            format = "PM";
+                        } else if (hourOfDay > 12) {
+                            hourOfDay -= 12;
+                            format = "PM";
+                        } else {
+                            format = "AM";
+                        }
+                        String mdate = hourOfDay + ":" + minute + " " + format;
+                        binding.txtTime.setText(mdate);
+                    }
+                }, tHour, tMinute, false);
+                timePickerDialog.show();
+            }
+        });
+
+        //change the date
+        binding.txtDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //get current date
+                final Calendar c = Calendar.getInstance();
+                dYear = c.get(Calendar.YEAR);
+                dMonth = c.get(Calendar.MONTH);
+                dDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddEntry.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        //set text
+                        //format date
+
+
+                        SimpleDateFormat originalFormat =  new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy");
+
+                        String origDate = dayOfMonth + "-" + (monthOfYear+1) + "-" + year;
+                        Date formattedDate = null;
+                        try {
+                            formattedDate = originalFormat.parse(origDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        binding.txtDate.setText(dateFormat.format(formattedDate));
+                    }
+                }, dYear, dMonth, dDay);
+                datePickerDialog.show();
+            }
+        });
+
+
     }
 }

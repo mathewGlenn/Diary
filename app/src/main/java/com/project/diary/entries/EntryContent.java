@@ -18,6 +18,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.diary.databinding.ActivityEntryContentBinding;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EntryContent extends AppCompatActivity {
 
     Intent data;
@@ -37,10 +42,23 @@ public class EntryContent extends AppCompatActivity {
 
         data = getIntent();
 
+        String date = data.getStringExtra("date");
+
+        DateFormat inputFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
+
+        Date d_date = null;
+        try {
+            d_date = inputFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DateFormat dateOnly = new SimpleDateFormat("E, dd MMM yyyy");
+        DateFormat timeOnly = new SimpleDateFormat("h:mm a");
+
         binding.entryTitle.setText(data.getStringExtra("title"));
         binding.entryContent.setText(data.getStringExtra("content"));
-        binding.txtDate.setText(data.getStringExtra("date"));
-        binding.txtTime.setText(data.getStringExtra("time"));
+        binding.txtDate.setText(dateOnly.format(d_date));
+       binding.txtTime.setText(timeOnly.format(d_date));
 
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,8 +73,8 @@ public class EntryContent extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), EditEntry.class);
                 intent.putExtra("title", data.getStringExtra("title"));
                 intent.putExtra("content", data.getStringExtra("content"));
-                intent.putExtra("date", data.getStringExtra("date"));
-                intent.putExtra("time", data.getStringExtra("time"));
+                intent.putExtra("dateOnly", binding.txtDate.getText().toString());
+                intent.putExtra("timeOnly", binding.txtTime.getText().toString());
                 intent.putExtra("entryID",data.getStringExtra("entryID"));
                 startActivity(intent);
             }
