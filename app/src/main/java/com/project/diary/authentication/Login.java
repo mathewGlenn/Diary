@@ -3,6 +3,7 @@ package com.project.diary.authentication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.diary.R;
+import com.project.diary.Splash;
 import com.project.diary.databinding.ActivityLoginBinding;
 
 public class Login extends AppCompatActivity {
@@ -54,6 +56,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), Splash.class));
                         finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {

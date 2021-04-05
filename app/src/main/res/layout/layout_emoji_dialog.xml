@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="25dp"
+    android:orientation="vertical">
+
+
+    <RadioGroup
+        android:id="@+id/rdgroup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="20dp">
+
+
+        <RadioButton
+            android:id="@+id/happy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_happy_svg" />
+
+        <RadioButton
+            android:id="@+id/crazy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_crazy_svg" />
+        <RadioButton
+            android:id="@+id/love"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_hert_eyes_svg" />
+
+        <RadioButton
+            android:id="@+id/sad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_sad_svg" />
+
+        <RadioButton
+            android:id="@+id/sick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_sick_svg" />
+
+
+        <RadioButton
+            android:id="@+id/angry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_angry_svg" />
+
+    </RadioGroup>
+
+    <!--
+    <RadioGroup
+        android:id="@+id/rdgroup2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+
+        <RadioButton
+            android:id="@+id/surprised"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_suprised_svg" />
+
+        <RadioButton
+            android:id="@+id/cool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_cool_svg" />
+
+        <RadioButton
+            android:id="@+id/worried"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_worried_svg" />
+
+        <RadioButton
+            android:id="@+id/nevermind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_nevermind_svg" />
+
+    </RadioGroup>
+
+
+    <RadioGroup
+        android:id="@+id/rdgroup3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/sad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_sad_svg" />
+
+        <RadioButton
+            android:id="@+id/crying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_crying_svg" />
+
+        <RadioButton
+            android:id="@+id/sick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_sick_svg" />
+
+        <RadioButton
+            android:id="@+id/angry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/emoji_selector"
+            android:button="@drawable/ic_angry_svg" />
+
+    </RadioGroup>
+    -->
+
+
+</LinearLayout>

@@ -98,16 +98,15 @@
                 app:layout_constraintTop_toTopOf="@id/lineSep" />
 
             <ImageView
-                android:id="@+id/smiley"
+                android:id="@+id/img_emoji"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_margin="5dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/smiley"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+             <TextView
                 android:id="@+id/entry_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,6 +142,12 @@
                 android:layout_height="100dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="text"
+                    android:id="@+id/tfeel"/>
 
             </androidx.cardview.widget.CardView>
 

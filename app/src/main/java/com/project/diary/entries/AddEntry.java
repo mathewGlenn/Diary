@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.project.diary.EmojiDialog;
+import com.project.diary.R;
 import com.project.diary.databinding.ActivityAddEntryBinding;
 
 import java.text.DateFormat;
@@ -28,7 +31,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class AddEntry extends AppCompatActivity {
+public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDialogListener {
+
+    ImageButton choose_feeling;
+    //for emoji
+    String userFeeling = "happy";
 
     //for date time picker
     private int dYear, dMonth, dDay, tHour, tMinute;
@@ -43,6 +50,8 @@ public class AddEntry extends AppCompatActivity {
         binding = ActivityAddEntryBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        choose_feeling = binding.btnEmoji;
 
         firestore = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -59,8 +68,8 @@ public class AddEntry extends AppCompatActivity {
 
         try {
             Date d_date = dateFormat.parse(date);
-            DateFormat dateOnly = new SimpleDateFormat("E, dd MMM yyyy");
-            DateFormat timeOnly = new SimpleDateFormat("h:mm a");
+            DateFormat dateOnly = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
+            DateFormat timeOnly = new SimpleDateFormat("h:mm a", java.util.Locale.getDefault());
 
             binding.txtTime.setText(timeOnly.format(d_date));
             binding.txtDate.setText(dateOnly.format(d_date));
@@ -99,6 +108,7 @@ public class AddEntry extends AppCompatActivity {
                 entry.put("title", entry_title);
                 entry.put("content", entry_content);
                 entry.put("date", entry_date_time);
+                entry.put("feeling", userFeeling);
 
                 reference.set(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -168,10 +178,10 @@ public class AddEntry extends AppCompatActivity {
                         //format date
 
 
-                        SimpleDateFormat originalFormat =  new SimpleDateFormat("dd-MM-yyyy");
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy");
+                        SimpleDateFormat originalFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
 
-                        String origDate = dayOfMonth + "-" + (monthOfYear+1) + "-" + year;
+                        String origDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
                         Date formattedDate = null;
                         try {
                             formattedDate = originalFormat.parse(origDate);
@@ -185,6 +195,49 @@ public class AddEntry extends AppCompatActivity {
             }
         });
 
+        // Show emoji dialog to change the emoji
 
+        choose_feeling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EmojiDialog emojiDialog = new EmojiDialog();
+                emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
+            }
+        });
+
+        // show emoji dialog when the activity starts
+        EmojiDialog emojiDialog = new EmojiDialog();
+        emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
+
+
+    }
+
+    @Override
+    public void applyFeeling(String uFeeling) {
+        userFeeling = uFeeling;
+
+        switch (userFeeling) {
+            case "happy":
+                choose_feeling.setImageResource(R.drawable.ic_happy_svg);
+                break;
+            case "crazy":
+                choose_feeling.setImageResource(R.drawable.ic_crazy_svg);
+                break;
+            case "love":
+                choose_feeling.setImageResource(R.drawable.ic_hert_eyes_svg);
+                break;
+            case "sad":
+                choose_feeling.setImageResource(R.drawable.ic_sad_svg);
+                break;
+            case "sick":
+                choose_feeling.setImageResource(R.drawable.ic_sick_svg);
+                break;
+            case "angry":
+                choose_feeling.setImageResource(R.drawable.ic_angry_svg);
+                break;
+            default:
+                choose_feeling.setImageResource(R.drawable.ic_happy_svg);
+                break;
+        }
     }
 }

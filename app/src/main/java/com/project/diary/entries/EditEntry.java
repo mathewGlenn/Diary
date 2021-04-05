@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -18,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.project.diary.EmojiDialog;
+import com.project.diary.R;
 import com.project.diary.databinding.ActivityEditEntryBinding;
 
 import java.text.ParseException;
@@ -27,7 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditEntry extends AppCompatActivity {
+public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDialogListener {
     //for date time picker
     private int dYear, dMonth, dDay, tHour, tMinute;
     FirebaseFirestore firestore;
@@ -35,10 +38,10 @@ public class EditEntry extends AppCompatActivity {
     FirebaseUser user;
     private ActivityEditEntryBinding binding;
 
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
+    ImageButton choose_feeling;
+    String userFeeling = "";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +59,15 @@ public class EditEntry extends AppCompatActivity {
         String content = data.getStringExtra("content");
         String date = data.getStringExtra("dateOnly");
         String time = data.getStringExtra("timeOnly");
+        userFeeling = data.getStringExtra("feeling");
+
+        choose_feeling = binding.btnEmoji;
 
         binding.entryTitle.setText(title);
         binding.entryContent.setText(content);
         binding.txtTime.setText(time);
         binding.txtDate.setText(date);
+        checkUserFeeling();
 
         binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +93,15 @@ public class EditEntry extends AppCompatActivity {
                 entry.put("title", editTitle);
                 entry.put("content", editContent);
                 entry.put("date", editDateTime);
+                entry.put("feeling", userFeeling);
 
                 reference.update(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(EditEntry.this, "Update Successful", Toast.LENGTH_SHORT).show();
                         binding.progress.setVisibility(View.INVISIBLE);
+                        //finishing Entry Content and going directly to Entries List
+                        setResult(RESULT_OK, new Intent());
                         finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -173,5 +183,58 @@ public class EditEntry extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+        binding.btnEmoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EmojiDialog emojiDialog = new EmojiDialog();
+                emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
+            }
+        });
     }
+
+
+    public void checkUserFeeling(){
+        switch (userFeeling) {
+            case "happy":
+                choose_feeling.setImageResource(R.drawable.ic_happy_svg);
+                break;
+            case "crazy":
+                choose_feeling.setImageResource(R.drawable.ic_crazy_svg);
+                break;
+            case "love":
+                choose_feeling.setImageResource(R.drawable.ic_hert_eyes_svg);
+                break;
+            case "sad":
+                choose_feeling.setImageResource(R.drawable.ic_sad_svg);
+                break;
+            case "sick":
+                choose_feeling.setImageResource(R.drawable.ic_sick_svg);
+                break;
+            case "angry":
+                choose_feeling.setImageResource(R.drawable.ic_angry_svg);
+                break;
+            default:
+                choose_feeling.setImageResource(R.drawable.ic_happy_svg);
+                break;
+        }
+    }
+
+    @Override
+    public void applyFeeling(String uFeeling) {
+        userFeeling = uFeeling;
+
+        checkUserFeeling();
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Did not saved anything so go back to Entry Content
+        setResult(RESULT_CANCELED, new Intent());
+        finish();
+    }
+
+
 }

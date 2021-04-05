@@ -1,6 +1,7 @@
 package com.project.diary.entries;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.project.diary.R;
 import com.project.diary.databinding.ActivityEntryContentBinding;
 
 import java.text.DateFormat;
@@ -30,6 +32,17 @@ public class EntryContent extends AppCompatActivity {
     FirebaseUser user;
 
     private ActivityEntryContentBinding binding;
+
+    //if the user go to edit and did not do anything, he will go back to EntryContent
+    //if the user edited something, he will go back to EntriesList
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            finish();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +56,7 @@ public class EntryContent extends AppCompatActivity {
         data = getIntent();
 
         String date = data.getStringExtra("date");
+        String userFeeling = data.getStringExtra("feeling");
 
         DateFormat inputFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
 
@@ -58,7 +72,31 @@ public class EntryContent extends AppCompatActivity {
         binding.entryTitle.setText(data.getStringExtra("title"));
         binding.entryContent.setText(data.getStringExtra("content"));
         binding.txtDate.setText(dateOnly.format(d_date));
-       binding.txtTime.setText(timeOnly.format(d_date));
+        binding.txtTime.setText(timeOnly.format(d_date));
+
+        switch (userFeeling) {
+            case "happy":
+                binding.imgEmoji.setImageResource(R.drawable.ic_happy_svg);
+                break;
+            case "crazy":
+                binding.imgEmoji.setImageResource(R.drawable.ic_crazy_svg);
+                break;
+            case "love":
+                binding.imgEmoji.setImageResource(R.drawable.ic_hert_eyes_svg);
+                break;
+            case "sad":
+                binding.imgEmoji.setImageResource(R.drawable.ic_sad_svg);
+                break;
+            case "sick":
+                binding.imgEmoji.setImageResource(R.drawable.ic_sick_svg);
+                break;
+            case "angry":
+                binding.imgEmoji.setImageResource(R.drawable.ic_angry_svg);
+                break;
+            default:
+                binding.imgEmoji.setVisibility(View.INVISIBLE);
+        }
+
 
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,10 +113,16 @@ public class EntryContent extends AppCompatActivity {
                 intent.putExtra("content", data.getStringExtra("content"));
                 intent.putExtra("dateOnly", binding.txtDate.getText().toString());
                 intent.putExtra("timeOnly", binding.txtTime.getText().toString());
-                intent.putExtra("entryID",data.getStringExtra("entryID"));
-                startActivity(intent);
+                intent.putExtra("feeling", data.getStringExtra("feeling"));
+                intent.putExtra("entryID", data.getStringExtra("entryID"));
+                startActivityForResult(intent, 1);
             }
+
+
+
         });
+
+
 
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +159,7 @@ public class EntryContent extends AppCompatActivity {
             }
         });
 
-
+        binding.tfeel.setText(data.getStringExtra("feeling"));
 
 
     }

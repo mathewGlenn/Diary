@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:background="@color/black">
+    android:layout_height="170dp">
 
     <TextView
         android:id="@+id/textView2"
@@ -18,7 +17,7 @@
         android:lineSpacingExtra="8sp"
         android:text="Cloud Diary"
         android:textAlignment="viewStart"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="30sp"
         android:typeface="normal"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,20 +32,19 @@
         android:fontFamily="@font/montserrat_medium"
         android:text="Keep a diary and someday it'll keep you"
         android:textAlignment="viewStart"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/userDisplayName"
-        android:layout_width="84dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/montserrat_medium"
-        android:text="User Name"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -55,8 +53,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text="Email Address"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userDisplayName" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

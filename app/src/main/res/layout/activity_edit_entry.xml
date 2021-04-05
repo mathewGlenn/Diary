@@ -118,14 +118,15 @@
 
             <ImageButton
                 android:scaleType="fitXY"
-                android:background="@color/transparrent"
+                android:background="@drawable/circle_shape"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/smiley"
+                android:src="@drawable/ic_happy_svg"
+                android:padding="3dp"
                 android:layout_margin="5dp"
-                android:id="@+id/smiley"/>
+                android:id="@+id/btn_emoji"/>
 
             <EditText
                 android:textColor="@color/black"

@@ -7,7 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,11 +27,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Glenn's Diary"
+        android:text="Diary"
         android:fontFamily="@font/montserrat_bold"
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:id="@+id/user_name_diary"
+        android:id="@+id/uname_diary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/side_menu"
@@ -45,11 +44,13 @@
         android:layout_height="45dp"
         android:theme="@style/Theme.WhiteActionBar"
         android:src="@drawable/heart"
+        android:clickable="true"
         app:fabCustomSize="45dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@id/addEntry"
         app:layout_constraintEnd_toStartOf="@id/addEntry"
-        app:layout_constraintTop_toTopOf="@id/addEntry"/>
+        app:layout_constraintTop_toTopOf="@id/addEntry"
+        android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="45dp"
@@ -58,15 +59,16 @@
         android:theme="@style/Theme.WhiteActionBar"
         android:src="@drawable/person"
         app:fabCustomSize="45dp"
+        android:focusable="true"
         android:layout_marginStart="30dp"
         app:layout_constraintBottom_toBottomOf="@id/addEntry"
         app:layout_constraintStart_toEndOf="@id/addEntry"
         app:layout_constraintTop_toTopOf="@id/addEntry"/>
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addEntry"
         android:layout_width="wrap_content"
+        android:focusable="true"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:contentDescription="@string/add_entry"
@@ -75,8 +77,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -84,8 +84,8 @@
         android:layout_marginTop="50dp"
         android:scrollbars="vertical"
         android:paddingBottom="100dp"
-        android:clipToPadding="false" />
-
+        android:clipToPadding="false"
+        android:layoutAnimation="@anim/layout_anim_fall_down"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

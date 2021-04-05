@@ -118,28 +118,29 @@
 
             <ImageButton
                 android:scaleType="fitXY"
-                android:background="@color/transparrent"
+                android:background="@drawable/circle_shape"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/smiley"
+                android:src="@drawable/ic_happy_svg"
+                android:padding="3dp"
                 android:layout_margin="5dp"
-                android:id="@+id/smiley"/>
+                android:id="@+id/btn_emoji"/>
 
             <EditText
+                android:id="@+id/entry_title"
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/lineSep"
-                android:hint="Title"
-                android:fontFamily="@font/montserrat_semi_bold"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/transparrent"
+                android:fontFamily="@font/montserrat_semi_bold"
+                android:hint="Title"
                 android:textSize="17sp"
-                android:id="@+id/entry_title"
-                android:background="@color/transparrent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lineSep" />
 
             <EditText
                 android:layout_width="match_parent"

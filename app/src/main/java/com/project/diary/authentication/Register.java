@@ -64,9 +64,9 @@ public class Register extends AppCompatActivity {
                                  .setDisplayName(full_name)
                                  .build();
                          user.updateProfile(request);
-
-                         startActivity(new Intent(getApplicationContext(), EntriesList.class));
                          finish();
+                         startActivity(new Intent(getApplicationContext(), EntriesList.class));
+
                      }
                  }).addOnFailureListener(new OnFailureListener() {
                      @Override
