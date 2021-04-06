@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.project.diary.MainActivity2;
 import com.project.diary.R;
 import com.project.diary.Splash;
 import com.project.diary.authentication.Login;
@@ -61,6 +62,10 @@ public class EntriesList extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        ///
+
+        ///
 
 
         firestore = FirebaseFirestore.getInstance();
@@ -232,7 +237,7 @@ public class EntriesList extends AppCompatActivity {
         binding.btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EntriesList.this, "Profile", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), MainActivity2.class));
             }
         });
 
@@ -325,26 +330,10 @@ public class EntriesList extends AppCompatActivity {
         } else {
 
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(EntriesList.this);
-            builder.setMessage("Are you sure to logout?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    auth.signOut();
-                                    startActivity(new Intent(getApplicationContext(), Splash.class));
-                                    finish();
-                                }
-                            });
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).show();
+            auth.signOut();
+            finish();
+            startActivity(new Intent(getApplicationContext(), Splash.class));
+
         }
     }
 

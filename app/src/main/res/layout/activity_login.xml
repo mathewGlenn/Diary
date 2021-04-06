@@ -30,92 +30,94 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:fontFamily="@font/montserrat_semi_bold"
             android:text="Login"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="22sp"
-            android:layout_marginBottom="55dp"/>
+            android:textSize="22sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="25dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="25dp"
+                android:fontFamily="@font/montserrat_medium"
                 android:hint="Email Address"
-                android:textSize="16sp"
                 android:inputType="text"
                 android:maxLines="1"
-                android:fontFamily="@font/montserrat_medium"/>
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginHorizontal="25dp"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="25dp"
-                android:hint="Password"
-                android:textSize="16sp"
                 android:fontFamily="@font/montserrat_medium"
+                android:hint="Password"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/btnLogin"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:background="@drawable/button_semiround_black_bg"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
+            android:background="@drawable/button_semiround_black_bg"
             android:text="Login"
-            android:textColor="@color/white"
-            android:id="@+id/btnLogin"/>
+            android:textColor="@color/white" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Forgot Password?"
-            android:fontFamily="@font/montserrat_medium"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textAlignment="center"
             android:id="@+id/btnForgotPass"
-            android:layout_marginTop="25dp"/>
-        <TextView
-            android:fontFamily="@font/montserrat_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create New Account"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textSize="12sp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Forgot Password?"
             android:textAlignment="center"
-            android:id="@+id/btnCreateNewAcc"/>
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/btnCreateNewAcc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Create New Account"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
 
     </LinearLayout>
 
-<ProgressBar
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:id="@+id/progress"
-    android:visibility="invisible"/>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

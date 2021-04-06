@@ -47,7 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="feeling"
-            android:onClick="onChooseFeeling"/>
+            android:onClick="onChooseFeeling"
+            style="material"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,6 +56,16 @@
             android:onClick="gotoMainAc"/>
 
     </LinearLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        style="@style/Theme.MaterialComponents"
+        android:layout_width="match_parent"
+        app:chipMinTouchTargetSize="0dp"
+        android:layout_height="wrap_content"
+        app:chipSpacingVertical="2dp"
+        android:id="@+id/chipGroup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="20dp"/>
 
 
 

@@ -4,24 +4,32 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.project.diary.databinding.ActivityMain2Binding;
 import com.project.diary.entries.EntriesList;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity2 extends AppCompatActivity  implements EmojiDialog.EmojiDialogListener{
 
     private ActivityMain2Binding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         View v = binding.getRoot();
@@ -60,6 +68,12 @@ public class MainActivity2 extends AppCompatActivity  implements EmojiDialog.Emo
         }
 
 
+        List<String> tagList = new ArrayList<>();
+        tagList.add("Good");
+        tagList.add("Funny");
+        tagList.add("Sex");
+        setTag(tagList);
+
     }
 
 
@@ -76,5 +90,36 @@ public class MainActivity2 extends AppCompatActivity  implements EmojiDialog.Emo
 
     public void gotoMainAc(View view) {
         startActivity(new Intent(this, EntriesList.class));
+    }
+
+
+
+    private void setTag(final List<String> tagList) {
+        final ChipGroup chipGroup = findViewById(R.id.chipGroup);
+        for (int index = 0; index < tagList.size(); index++) {
+            final String tagName = tagList.get(index);
+            final Chip chip = new Chip(this);
+            int paddingDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 10,
+                    getResources().getDisplayMetrics()
+            );
+            chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+            chip.setText(tagName);
+            chip.setTextColor(getResources().getColor(R.color.white));
+            chip.setTextColor(getResources().getColor(R.color.white));
+            chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
+            chip.setTextAppearance(this, android.R.style.TextAppearance_Small);
+            chip.setCloseIconVisible(true);
+            //Added click listener on close icon to remove tag from ChipGroup
+            chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tagList.remove(tagName);
+                    chipGroup.removeView(chip);
+                }
+            });
+
+            chipGroup.addView(chip);
+        }
     }
 }

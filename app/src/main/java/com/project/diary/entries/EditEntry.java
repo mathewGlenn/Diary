@@ -167,8 +167,8 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                         //format date
 
 
-                        SimpleDateFormat originalFormat =  new SimpleDateFormat("dd-MM-yyyy");
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy");
+                        SimpleDateFormat originalFormat =  new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
 
                         String origDate = dayOfMonth + "-" + (monthOfYear+1) + "-" + year;
                         Date formattedDate = null;
