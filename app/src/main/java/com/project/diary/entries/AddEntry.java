@@ -25,6 +25,7 @@ import com.project.diary.databinding.ActivityAddEntryBinding;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,6 +83,12 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
             @Override
             public void onClick(View v) {
 
+                String[] mTags = {"Happy", "Travel", "Nature", "School"};
+
+                // try add array of tags
+
+                //
+
 
                 String entry_title, entry_content, entry_date, entry_time, entry_date_time;
 
@@ -109,6 +116,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                 entry.put("content", entry_content);
                 entry.put("date", entry_date_time);
                 entry.put("feeling", userFeeling);
+                entry.put("tags", Arrays.asList(mTags));
 
                 reference.set(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -210,6 +218,9 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
 
 
+
+
+        //end of onCreate
     }
 
     @Override

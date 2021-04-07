@@ -1,5 +1,7 @@
 package com.project.diary.model;
 
+import java.util.Arrays;
+
 public class Entry {
 
     private String title, content, date, feeling;
@@ -44,4 +46,5 @@ public class Entry {
     public void setFeeling(String feeling) {
         this.feeling = feeling;
     }
+
 }
