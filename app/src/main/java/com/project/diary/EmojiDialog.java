@@ -33,7 +33,7 @@ public class EmojiDialog extends AppCompatDialogFragment {
         rg1 = view.findViewById(R.id.rdgroup1);
 
         builder.setView(view)
-                .setTitle("What do you feel?")
+                .setTitle("How do you feel?")
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

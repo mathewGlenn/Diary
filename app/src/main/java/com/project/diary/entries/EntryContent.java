@@ -8,11 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,7 +26,9 @@ import com.project.diary.databinding.ActivityEntryContentBinding;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class EntryContent extends AppCompatActivity {
 
@@ -57,6 +62,10 @@ public class EntryContent extends AppCompatActivity {
 
         String date = data.getStringExtra("date");
         String userFeeling = data.getStringExtra("feeling");
+
+        ArrayList<String> entryTags = data.getStringArrayListExtra("tags");
+
+        setTag(entryTags);
 
         DateFormat inputFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
 
@@ -162,5 +171,24 @@ public class EntryContent extends AppCompatActivity {
         binding.tfeel.setText(data.getStringExtra("feeling"));
 
 
+    }
+
+    private void setTag(final List<String> tagList) {
+        final ChipGroup chipGroup = binding.chipGroup;
+        for (int index = 0; index < tagList.size(); index++) {
+            final String tagName = tagList.get(index);
+            final Chip chip = new Chip(this);
+            int paddingDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 10,
+                    getResources().getDisplayMetrics()
+            );
+            chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+            chip.setText(tagName);
+            chip.setChipBackgroundColorResource(R.color.black);
+            chip.setTextColor(getResources().getColor(R.color.white));
+            chip.setEnsureMinTouchTargetSize(false);
+
+            chipGroup.addView(chip);
+        }
     }
 }

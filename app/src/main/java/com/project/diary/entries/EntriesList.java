@@ -38,7 +38,9 @@ import com.project.diary.model.Entry;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class EntriesList extends AppCompatActivity {
@@ -55,6 +57,9 @@ public class EntriesList extends AppCompatActivity {
     FirestoreRecyclerAdapter<Entry, NoteViewHolder> entryAdapter;
     FirebaseUser user;
     FirebaseAuth auth;
+
+    List<String> entryTags;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,7 @@ public class EntriesList extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, int i, @NonNull Entry entry) {
 
                 String userFeeling = entry.getFeeling();
+                entryTags = entry.getTags();
 
                 SimpleDateFormat dateFormat, timeFormat;
 
@@ -141,6 +147,7 @@ public class EntriesList extends AppCompatActivity {
                 }
                 //get id of entry to be used in updating and deleting
                 String docID = entryAdapter.getSnapshots().getSnapshot(i).getId();
+                ArrayList<String> arrLisTags = new ArrayList<>(entryTags);
 
                 // When clicking an Entry from the RecylerView entry list
                 noteViewHolder.view.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +159,7 @@ public class EntriesList extends AppCompatActivity {
                         i.putExtra("content", entry.getContent());
                         i.putExtra("date", entry.getDate());
                         i.putExtra("feeling", entry.getFeeling());
+                        i.putStringArrayListExtra("tags", arrLisTags);
                         i.putExtra("entryID", docID);
                         startActivity(i);
                     }

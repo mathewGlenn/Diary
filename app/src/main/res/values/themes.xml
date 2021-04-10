@@ -23,4 +23,14 @@
         <!-- Secondary brand color. -->
         <item name="colorOnSecondary">@color/white</item>
     </style>
+
+    <style name="ThinnerChip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipCornerRadius">12dp</item>
+        <item name="chipMinHeight">24dp</item>
+        <item name="android:textAppearance">@style/SmallerText</item>
+    </style>
+
+    <style name="SmallerText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">11sp</item>
+    </style>
 </resources>

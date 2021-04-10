@@ -61,6 +61,7 @@
         style="@style/Theme.MaterialComponents"
         android:layout_width="match_parent"
         app:chipMinTouchTargetSize="0dp"
+        android:backgroundTint="@color/black"
         android:layout_height="wrap_content"
         app:chipSpacingVertical="2dp"
         android:id="@+id/chipGroup"

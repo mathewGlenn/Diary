@@ -1,18 +1,23 @@
 package com.project.diary.model;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Entry {
 
     private String title, content, date, feeling;
+    private List<String> tags;
+    private Boolean isFavorite;
 
     public Entry(){}
 
-    public Entry(String nTitle, String nContent, String nDate, String nFeeling){
+    public Entry(String nTitle, String nContent, String nDate, String nFeeling, List<String> nTags, Boolean mIsFavorite){
         this.title = nTitle;
         this.content = nContent;
         this.date = nDate;
         this.feeling = nFeeling;
+        this.tags = nTags;
+        this.isFavorite = mIsFavorite;
     }
 
     public String getTitle() {
@@ -47,4 +52,12 @@ public class Entry {
         this.feeling = feeling;
     }
 
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
 }

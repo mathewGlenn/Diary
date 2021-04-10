@@ -106,7 +106,7 @@ public class MainActivity2 extends AppCompatActivity  implements EmojiDialog.Emo
             chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
             chip.setText(tagName);
             chip.setTextColor(getResources().getColor(R.color.white));
-            chip.setTextColor(getResources().getColor(R.color.white));
+            chip.setBackgroundColor(getResources().getColor(R.color.black));
             chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
             chip.setTextAppearance(this, android.R.style.TextAppearance_Small);
             chip.setCloseIconVisible(true);
