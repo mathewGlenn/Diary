@@ -9,18 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Diary">
-        <activity android:name=".authentication.Register">
-
-        </activity>
-        <activity android:name=".authentication.Login">
-
-        </activity>
+        <activity android:name=".entries.FavoriteEntries"></activity>
+        <activity android:name=".authentication.Register"></activity>
+        <activity android:name=".authentication.Login"></activity>
         <activity android:name=".entries.EditEntry" />
         <activity android:name=".entries.EntryContent" />
         <activity android:name=".entries.AddEntry" />
-        <activity android:name=".MainActivity2">
-
-        </activity>
+        <activity android:name=".MainActivity2"></activity>
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

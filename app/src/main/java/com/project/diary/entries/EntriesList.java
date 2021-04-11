@@ -219,13 +219,12 @@ public class EntriesList extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), Login.class));
                         finish();
                     }
-                } else if (item.getItemId() == R.id.sync_account){
-                    if(!user.isAnonymous()){
+                } else if (item.getItemId() == R.id.sync_account) {
+                    if (!user.isAnonymous()) {
                         Toast.makeText(EntriesList.this, "Account already synced", Toast.LENGTH_SHORT).show();
-                    }else
+                    } else
                         startActivity(new Intent(getApplicationContext(), Register.class));
-                }
-                else if (item.getItemId() == R.id.logout)
+                } else if (item.getItemId() == R.id.logout)
                     checkUser();
 
                 return true;
@@ -237,7 +236,7 @@ public class EntriesList extends AppCompatActivity {
         binding.btnHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EntriesList.this, "Heart", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), FavoriteEntries.class));
             }
         });
 

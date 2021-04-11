@@ -22,7 +22,8 @@
         android:scaleType="fitXY"
         android:src="@drawable/side_menu_icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,6 +45,7 @@
         android:layout_height="45dp"
         android:theme="@style/Theme.WhiteActionBar"
         android:src="@drawable/heart"
+        android:contentDescription="favorites button"
         android:clickable="true"
         app:fabCustomSize="45dp"
         android:layout_marginEnd="30dp"
