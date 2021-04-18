@@ -1,10 +1,5 @@
 package com.project.diary.entries;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +7,11 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +33,6 @@ import java.util.List;
 
 public class EntryContent extends AppCompatActivity {
 
-    ImageButton imgFavorite;
     Boolean entryIsFavorite;
 
     Intent data;
@@ -69,9 +68,7 @@ public class EntryContent extends AppCompatActivity {
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
 
         ArrayList<String> entryTags = data.getStringArrayListExtra("tags");
-
         setTag(entryTags);
-
         DateFormat inputFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
 
         Date d_date = null;
@@ -128,15 +125,14 @@ public class EntryContent extends AppCompatActivity {
                 intent.putExtra("dateOnly", binding.txtDate.getText().toString());
                 intent.putExtra("timeOnly", binding.txtTime.getText().toString());
                 intent.putExtra("feeling", data.getStringExtra("feeling"));
+                intent.putStringArrayListExtra("tags", entryTags);
                 intent.putExtra("entryID", data.getStringExtra("entryID"));
                 intent.putExtra("isFavorite", entryIsFavorite);
                 startActivityForResult(intent, 1);
             }
 
 
-
         });
-
 
 
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -175,10 +171,9 @@ public class EntryContent extends AppCompatActivity {
         });
 
 
-
-        if (entryIsFavorite){
+        if (entryIsFavorite) {
             binding.btnFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
-        }else{
+        } else {
             binding.btnFavorite.setVisibility(View.INVISIBLE);
         }
 

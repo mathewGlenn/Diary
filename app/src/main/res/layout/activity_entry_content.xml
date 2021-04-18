@@ -103,11 +103,12 @@
                         android:layout_height="34dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="15dp"
-                        android:padding="3dp"
                         android:background="@color/transparrent"
+                        android:padding="3dp"
                         android:scaleType="fitXY"
                         app:layout_constraintEnd_toStartOf="@id/img_emoji"
                         app:layout_constraintTop_toTopOf="parent" />
+
                     <ImageView
                         android:id="@+id/img_emoji"
                         android:layout_width="34dp"
@@ -145,9 +146,7 @@
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chipGroup"
-
                         android:layout_width="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="100dp"
@@ -155,6 +154,7 @@
                         android:paddingBottom="25dp"
                         app:chipMinTouchTargetSize="0dp"
                         app:chipSpacingVertical="2dp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/entry_content"
                         app:singleLine="true" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

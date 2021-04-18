@@ -1,20 +1,28 @@
 package com.project.diary.entries;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,12 +30,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.diary.EmojiDialog;
 import com.project.diary.R;
 import com.project.diary.databinding.ActivityEditEntryBinding;
+import com.project.diary.model.Entry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDialogListener {
@@ -41,6 +52,9 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     ImageButton choose_feeling, imgFavorite;
     String userFeeling = "";
     Boolean entryIsFavorite;
+
+    List<String> entryTags;
+    String[] mTags = {"Happy", "Travel", "Nature", "School"};
 
 
 
@@ -62,14 +76,16 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         String time = data.getStringExtra("timeOnly");
         userFeeling = data.getStringExtra("feeling");
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
+        entryTags = data.getStringArrayListExtra("tags");
 
         choose_feeling = binding.btnEmoji;
         imgFavorite = binding.btnFavorite;
 
-        binding.entryTitle.setText(entryIsFavorite.toString());
+        binding.entryTitle.setText(title);
         binding.entryContent.setText(content);
         binding.txtTime.setText(time);
         binding.txtDate.setText(date);
+        setTag(entryTags);
         checkUserFeeling();
 
         binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +97,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 String editTime = binding.txtTime.getText().toString();
                 String editDateTime = editDate.concat(" " + editTime);
 
-                if (editContent.isEmpty()){
+                if (editContent.isEmpty()) {
                     Toast.makeText(EditEntry.this, "Entry content is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -97,7 +113,12 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 entry.put("content", editContent);
                 entry.put("date", editDateTime);
                 entry.put("feeling", userFeeling);
+                entry.put("tags", entryTags);
                 entry.put("favorite", entryIsFavorite);
+
+
+               // Entry entry = new Entry(editTitle, editContent,editDateTime,userFeeling,entryTags,entryIsFavorite);
+
 
                 reference.update(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -171,10 +192,10 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                         //format date
 
 
-                        SimpleDateFormat originalFormat =  new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                        SimpleDateFormat originalFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                         SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
 
-                        String origDate = dayOfMonth + "-" + (monthOfYear+1) + "-" + year;
+                        String origDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
                         Date formattedDate = null;
                         try {
                             formattedDate = originalFormat.parse(origDate);
@@ -196,20 +217,26 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             }
         });
 
-        imgFavorite  = binding.btnFavorite;
+        imgFavorite = binding.btnFavorite;
         if (entryIsFavorite) {
             imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
             imgFavorite.setTag(2);
-        }else {
+        } else {
             imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
             imgFavorite.setTag(1);
         }
 
+        binding.btnTags.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddTagDialog();
+            }
+        });
         //end of onCreate
     }
 
 
-    public void checkUserFeeling(){
+    public void checkUserFeeling() {
         switch (userFeeling) {
             case "happy":
                 choose_feeling.setImageResource(R.drawable.ic_happy_svg);
@@ -253,14 +280,75 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
 
     public void isEntryFavorite(View view) {
-        if (imgFavorite.getTag().equals(1)){
+        if (imgFavorite.getTag().equals(1)) {
             imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
             entryIsFavorite = true;
             imgFavorite.setTag(2);
-        }else{
+        } else {
             imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
             entryIsFavorite = false;
             imgFavorite.setTag(1);
         }
     }
+
+    //Show tags in chips
+    private void setTag(final List<String> tagList) {
+        final ChipGroup chipGroup = findViewById(R.id.chipGroup);
+        for (int index = 0; index < tagList.size(); index++) {
+            final String tagName = tagList.get(index);
+            final Chip chip = new Chip(this);
+            int paddingDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 10,
+                    getResources().getDisplayMetrics()
+            );
+            chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+            chip.setText(tagName);
+            chip.setTextColor(getResources().getColor(R.color.white));
+            chip.setBackgroundColor(getResources().getColor(R.color.black));
+            chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
+            chip.setTextAppearance(this, android.R.style.TextAppearance_Small);
+            chip.setCloseIconVisible(true);
+            //Added click listener on close icon to remove tag from ChipGroup
+            chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tagList.remove(tagName);
+                    entryTags.remove(tagName);
+                    chipGroup.removeView(chip);
+                }
+            });
+
+            chipGroup.addView(chip);
+        }
     }
+
+    protected void showAddTagDialog(){
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.add_tag_layout, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, mTags);
+        final AutoCompleteTextView textViewTag = view.findViewById(R.id.autoCompleteAddTag);
+        textViewTag.setAdapter(adapter);
+
+        builder.setCancelable(false)
+                .setTitle("Add Tags")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        binding.chipGroup.removeAllViews();
+                        entryTags.add(textViewTag.getText().toString());
+                        setTag(entryTags);
+                    }
+                }).setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+}
