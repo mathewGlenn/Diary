@@ -92,9 +92,11 @@ public class EntriesList extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, int i, @NonNull Entry entry) {
 
                 String userFeeling = entry.getFeeling();
+                Boolean isFavorite = entry.getFavorite();
+
                 entryTags = entry.getTags();
 
-                SimpleDateFormat dateFormat, timeFormat;
+                SimpleDateFormat dateFormat;
 
                 dateFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
 
@@ -161,6 +163,7 @@ public class EntriesList extends AppCompatActivity {
                         i.putExtra("feeling", entry.getFeeling());
                         i.putStringArrayListExtra("tags", arrLisTags);
                         i.putExtra("entryID", docID);
+                        i.putExtra("isFavorite", isFavorite);
                         startActivity(i);
                     }
                 });

@@ -65,7 +65,9 @@ public class FavoriteEntries extends AppCompatActivity {
                 String userFeeling = entry.getFeeling();
                 entryTags = entry.getTags();
 
-                SimpleDateFormat dateFormat, timeFormat;
+                SimpleDateFormat dateFormat;
+
+                Boolean isFavorite = entry.getFavorite();
 
                 dateFormat = new SimpleDateFormat("E, dd MMM yyyy h:mm a");
 
@@ -132,6 +134,7 @@ public class FavoriteEntries extends AppCompatActivity {
                         i.putExtra("feeling", entry.getFeeling());
                         i.putStringArrayListExtra("tags", arrLisTags);
                         i.putExtra("entryID", docID);
+                        i.putExtra("isFavorite", isFavorite);
                         startActivity(i);
                     }
                 });

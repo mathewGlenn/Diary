@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,6 +32,9 @@ import java.util.Date;
 import java.util.List;
 
 public class EntryContent extends AppCompatActivity {
+
+    ImageButton imgFavorite;
+    Boolean entryIsFavorite;
 
     Intent data;
     FirebaseFirestore firestore;
@@ -62,6 +66,7 @@ public class EntryContent extends AppCompatActivity {
 
         String date = data.getStringExtra("date");
         String userFeeling = data.getStringExtra("feeling");
+        entryIsFavorite = data.getBooleanExtra("isFavorite", false);
 
         ArrayList<String> entryTags = data.getStringArrayListExtra("tags");
 
@@ -124,6 +129,7 @@ public class EntryContent extends AppCompatActivity {
                 intent.putExtra("timeOnly", binding.txtTime.getText().toString());
                 intent.putExtra("feeling", data.getStringExtra("feeling"));
                 intent.putExtra("entryID", data.getStringExtra("entryID"));
+                intent.putExtra("isFavorite", entryIsFavorite);
                 startActivityForResult(intent, 1);
             }
 
@@ -168,8 +174,18 @@ public class EntryContent extends AppCompatActivity {
             }
         });
 
-        binding.tfeel.setText(data.getStringExtra("feeling"));
 
+
+        if (entryIsFavorite){
+            binding.btnFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+        }else{
+            binding.btnFavorite.setVisibility(View.INVISIBLE);
+        }
+
+        binding.tfeel.setText(entryIsFavorite.toString());
+
+
+        //end of onCreate
 
     }
 

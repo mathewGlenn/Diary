@@ -7,7 +7,7 @@ public class Entry {
 
     private String title, content, date, feeling;
     private List<String> tags;
-    private Boolean isFavorite;
+    private Boolean favorite;
 
     public Entry(){}
 
@@ -17,7 +17,7 @@ public class Entry {
         this.date = nDate;
         this.feeling = nFeeling;
         this.tags = nTags;
-        this.isFavorite = mIsFavorite;
+        this.favorite = mIsFavorite;
     }
 
     public String getTitle() {
@@ -58,6 +58,6 @@ public class Entry {
     }
 
     public Boolean getFavorite() {
-        return isFavorite;
+        return favorite;
     }
 }

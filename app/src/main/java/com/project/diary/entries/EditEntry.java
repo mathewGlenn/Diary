@@ -38,8 +38,9 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     FirebaseUser user;
     private ActivityEditEntryBinding binding;
 
-    ImageButton choose_feeling;
+    ImageButton choose_feeling, imgFavorite;
     String userFeeling = "";
+    Boolean entryIsFavorite;
 
 
 
@@ -60,10 +61,12 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         String date = data.getStringExtra("dateOnly");
         String time = data.getStringExtra("timeOnly");
         userFeeling = data.getStringExtra("feeling");
+        entryIsFavorite = data.getBooleanExtra("isFavorite", false);
 
         choose_feeling = binding.btnEmoji;
+        imgFavorite = binding.btnFavorite;
 
-        binding.entryTitle.setText(title);
+        binding.entryTitle.setText(entryIsFavorite.toString());
         binding.entryContent.setText(content);
         binding.txtTime.setText(time);
         binding.txtDate.setText(date);
@@ -94,6 +97,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 entry.put("content", editContent);
                 entry.put("date", editDateTime);
                 entry.put("feeling", userFeeling);
+                entry.put("favorite", entryIsFavorite);
 
                 reference.update(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -191,6 +195,17 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
             }
         });
+
+        imgFavorite  = binding.btnFavorite;
+        if (entryIsFavorite) {
+            imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+            imgFavorite.setTag(2);
+        }else {
+            imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
+            imgFavorite.setTag(1);
+        }
+
+        //end of onCreate
     }
 
 
@@ -237,4 +252,15 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     }
 
 
-}
+    public void isEntryFavorite(View view) {
+        if (imgFavorite.getTag().equals(1)){
+            imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+            entryIsFavorite = true;
+            imgFavorite.setTag(2);
+        }else{
+            imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
+            entryIsFavorite = false;
+            imgFavorite.setTag(1);
+        }
+    }
+    }
