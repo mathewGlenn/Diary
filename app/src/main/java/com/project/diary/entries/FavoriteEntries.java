@@ -146,6 +146,17 @@ public class FavoriteEntries extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_view, parent, false);
                 return new NoteViewHolder(view);
             }
+
+            @Override
+            public void onDataChanged() {
+                if (getItemCount() == 0){
+                    binding.lottieNoEntryYet.setVisibility(View.VISIBLE);
+                    binding.txtNoFavEntry.setVisibility(View.VISIBLE);
+                }else {
+                    binding.lottieNoEntryYet.setVisibility(View.INVISIBLE);
+                    binding.txtNoFavEntry.setVisibility(View.INVISIBLE);
+                }
+            }
         };
 
         favEntriesList = binding.entrieslist;
@@ -195,7 +206,5 @@ public class FavoriteEntries extends AppCompatActivity {
         super.onStop();
         entryAdapter.stopListening();
     }
-
-
 
 }

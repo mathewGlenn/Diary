@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".entries.AddEntry">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintWidth_percent="0.36"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_rawRes="@raw/loading_black"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:id="@+id/lottie_loading"/>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/action_bar"
@@ -191,16 +207,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

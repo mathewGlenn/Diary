@@ -72,6 +72,14 @@ public class EntriesList extends AppCompatActivity {
 
         ///
 
+        //if (entryAdapter.getItemCount() == 0){
+        //    binding.lottieNoEntryYet.setVisibility(View.VISIBLE);
+     //       binding.txtCreateFirstEntry.setVisibility(View.VISIBLE);
+       // }else {
+       //     binding.lottieNoEntryYet.setVisibility(View.INVISIBLE);
+      //      binding.txtCreateFirstEntry.setVisibility(View.INVISIBLE);
+        //}
+
 
         firestore = FirebaseFirestore.getInstance();
 
@@ -86,6 +94,7 @@ public class EntriesList extends AppCompatActivity {
         FirestoreRecyclerOptions<Entry> allentries = new FirestoreRecyclerOptions.Builder<Entry>()
                 .setQuery(query, Entry.class)
                 .build();
+
 
         entryAdapter = new FirestoreRecyclerAdapter<Entry, NoteViewHolder>(allentries) {
             @Override
@@ -175,6 +184,17 @@ public class EntriesList extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_view, parent, false);
 
                 return new NoteViewHolder(view);
+            }
+
+            @Override
+            public void onDataChanged() {
+                if (getItemCount() == 0){
+                    binding.lottieNoEntryYet.setVisibility(View.VISIBLE);
+                       binding.txtCreateFirstEntry.setVisibility(View.VISIBLE);
+                 }else {
+                     binding.lottieNoEntryYet.setVisibility(View.INVISIBLE);
+                      binding.txtCreateFirstEntry.setVisibility(View.INVISIBLE);
+            }
             }
         };
 
@@ -318,6 +338,8 @@ public class EntriesList extends AppCompatActivity {
 
             view = itemView;
         }
+
+
     }
 
     @Override

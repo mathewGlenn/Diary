@@ -123,7 +123,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                 //notes collection >> multiple notes
 
 
-                binding.progress.setVisibility(View.VISIBLE);
+                binding.lottieLoading.setVisibility(View.VISIBLE);
 
                 DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
 
@@ -141,7 +141,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_LONG).show();
-                        binding.progress.setVisibility(View.INVISIBLE);
+                        binding.lottieLoading.setVisibility(View.INVISIBLE);
                     }
                 });
             }

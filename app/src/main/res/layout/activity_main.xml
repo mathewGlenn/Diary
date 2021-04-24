@@ -89,6 +89,33 @@
         android:clipToPadding="false"
         android:layoutAnimation="@anim/layout_anim_fall_down"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="1"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_rawRes="@raw/lotti_flying"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_marginBottom="70dp"
+        android:visibility="invisible"
+        android:id="@+id/lottieNoEntryYet"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create your first entry"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="#787878"
+        app:layout_constraintTop_toBottomOf="@id/lottieNoEntryYet"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:id="@+id/txtCreateFirstEntry"
+        android:textSize="19sp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -99,5 +126,7 @@
         android:fitsSystemWindows="true"
         android:id="@+id/nav_view"
         android:layout_gravity="start"/>
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

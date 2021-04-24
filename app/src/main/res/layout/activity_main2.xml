@@ -68,6 +68,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="20dp"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_rawRes="@raw/favorite_girl_social_media"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:id="@+id/lottieAnim"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create your first entry"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="#787878"
+        app:layout_constraintTop_toBottomOf="@id/lottieAnim"
+        android:gravity="center"
+        android:id="@+id/txtCreateFirstEntry"
+        android:textSize="19sp"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

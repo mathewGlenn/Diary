@@ -3,7 +3,6 @@ package com.project.diary.entries;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -13,14 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.diary.EmojiDialog;
 import com.project.diary.R;
 import com.project.diary.databinding.ActivityEditEntryBinding;
-import com.project.diary.model.Entry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +48,6 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
     List<String> entryTags;
     String[] mTags = {"Happy", "Travel", "Nature", "School"};
-
 
 
     @Override
@@ -88,133 +80,112 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         setTag(entryTags);
         checkUserFeeling();
 
-        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String editTitle = binding.entryTitle.getText().toString();
-                String editContent = binding.entryContent.getText().toString();
-                String editDate = binding.txtDate.getText().toString();
-                String editTime = binding.txtTime.getText().toString();
-                String editDateTime = editDate.concat(" " + editTime);
+        binding.btnUpdate.setOnClickListener(v -> {
+            String editTitle = binding.entryTitle.getText().toString();
+            String editContent = binding.entryContent.getText().toString();
+            String editDate = binding.txtDate.getText().toString();
+            String editTime = binding.txtTime.getText().toString();
+            String editDateTime = editDate.concat(" " + editTime);
 
-                if (editContent.isEmpty()) {
-                    Toast.makeText(EditEntry.this, "Entry content is empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                binding.progress.setVisibility(View.VISIBLE);
-
-                //save edited note
-
-                DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document(data.getStringExtra("entryID"));
-
-                Map<String, Object> entry = new HashMap<>();
-                entry.put("title", editTitle);
-                entry.put("content", editContent);
-                entry.put("date", editDateTime);
-                entry.put("feeling", userFeeling);
-                entry.put("tags", entryTags);
-                entry.put("favorite", entryIsFavorite);
-
-
-               // Entry entry = new Entry(editTitle, editContent,editDateTime,userFeeling,entryTags,entryIsFavorite);
-
-
-                reference.update(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(EditEntry.this, "Update Successful", Toast.LENGTH_SHORT).show();
-                        binding.progress.setVisibility(View.INVISIBLE);
-                        //finishing Entry Content and going directly to Entries List
-                        setResult(RESULT_OK, new Intent());
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(EditEntry.this, "Failed updating entries", Toast.LENGTH_SHORT).show();
-                        binding.progress.setVisibility(View.INVISIBLE);
-                    }
-                });
+            if (editContent.isEmpty()) {
+                Toast.makeText(EditEntry.this, "Entry content is empty", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            binding.progress.setVisibility(View.VISIBLE);
+
+            //save edited note
+
+            DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document(data.getStringExtra("entryID"));
+
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("title", editTitle);
+            entry.put("content", editContent);
+            entry.put("date", editDateTime);
+            entry.put("feeling", userFeeling);
+            entry.put("tags", entryTags);
+            entry.put("favorite", entryIsFavorite);
+
+
+            // Entry entry = new Entry(editTitle, editContent,editDateTime,userFeeling,entryTags,entryIsFavorite);
+
+
+            reference.update(entry).addOnSuccessListener(aVoid -> {
+                Toast.makeText(EditEntry.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                binding.progress.setVisibility(View.INVISIBLE);
+                //finishing Entry Content and going directly to Entries List
+                setResult(RESULT_OK, new Intent());
+                finish();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(EditEntry.this, "Failed updating entries", Toast.LENGTH_SHORT).show();
+                binding.progress.setVisibility(View.INVISIBLE);
+            });
         });
 
 
         //Change the time
-        binding.txtTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                //get current time
-                tHour = c.get(Calendar.HOUR_OF_DAY);
-                tMinute = c.get(Calendar.MINUTE);
+        binding.txtTime.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            //get current time
+            tHour = c.get(Calendar.HOUR_OF_DAY);
+            tMinute = c.get(Calendar.MINUTE);
 
-                //Lauch the time picker dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(EditEntry.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String format;
-                        if (hourOfDay == 0) {
-                            hourOfDay += 12;
-                            format = "AM";
-                        } else if (hourOfDay == 12) {
-                            format = "PM";
-                        } else if (hourOfDay > 12) {
-                            hourOfDay -= 12;
-                            format = "PM";
-                        } else {
-                            format = "AM";
-                        }
-                        String mdate = hourOfDay + ":" + minute + " " + format;
-                        binding.txtTime.setText(mdate);
-                    }
-                }, tHour, tMinute, false);
-                timePickerDialog.show();
-            }
+            //Lauch the time picker dialog
+            TimePickerDialog timePickerDialog = new TimePickerDialog(EditEntry.this, (view1, hourOfDay, minute) -> {
+                String format;
+                if (hourOfDay == 0) {
+                    hourOfDay += 12;
+                    format = "AM";
+                } else if (hourOfDay == 12) {
+                    format = "PM";
+                } else if (hourOfDay > 12) {
+                    hourOfDay -= 12;
+                    format = "PM";
+                } else {
+                    format = "AM";
+                }
+                String mdate = hourOfDay + ":" + minute + " " + format;
+                binding.txtTime.setText(mdate);
+            }, tHour, tMinute, false);
+            timePickerDialog.show();
         });
 
         //change the date
-        binding.txtDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.txtDate.setOnClickListener(v -> {
 
-                //get current date
-                final Calendar c = Calendar.getInstance();
-                dYear = c.get(Calendar.YEAR);
-                dMonth = c.get(Calendar.MONTH);
-                dDay = c.get(Calendar.DAY_OF_MONTH);
+            //get current date
+            final Calendar c = Calendar.getInstance();
+            dYear = c.get(Calendar.YEAR);
+            dMonth = c.get(Calendar.MONTH);
+            dDay = c.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditEntry.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(EditEntry.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view12, int year, int monthOfYear, int dayOfMonth) {
 
-                        //set text
-                        //format date
+                    //set text
+                    //format date
 
 
-                        SimpleDateFormat originalFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
+                    SimpleDateFormat originalFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
 
-                        String origDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                        Date formattedDate = null;
-                        try {
-                            formattedDate = originalFormat.parse(origDate);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        binding.txtDate.setText(dateFormat.format(formattedDate));
+                    String origDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                    Date formattedDate = null;
+                    try {
+                        formattedDate = originalFormat.parse(origDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                }, dYear, dMonth, dDay);
-                datePickerDialog.show();
-            }
+                    binding.txtDate.setText(dateFormat.format(formattedDate));
+                }
+            }, dYear, dMonth, dDay);
+            datePickerDialog.show();
         });
 
-        binding.btnEmoji.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EmojiDialog emojiDialog = new EmojiDialog();
-                emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
-            }
+        binding.btnEmoji.setOnClickListener(v -> {
+            EmojiDialog emojiDialog = new EmojiDialog();
+            emojiDialog.show(getSupportFragmentManager(), "choose emoji on adding entry");
         });
 
         imgFavorite = binding.btnFavorite;
@@ -226,12 +197,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             imgFavorite.setTag(1);
         }
 
-        binding.btnTags.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddTagDialog();
-            }
-        });
+        binding.btnTags.setOnClickListener(v -> showAddTagDialog());
         //end of onCreate
     }
 
@@ -309,45 +275,34 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             chip.setTextAppearance(this, android.R.style.TextAppearance_Small);
             chip.setCloseIconVisible(true);
             //Added click listener on close icon to remove tag from ChipGroup
-            chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tagList.remove(tagName);
-                    entryTags.remove(tagName);
-                    chipGroup.removeView(chip);
-                }
+            chip.setOnCloseIconClickListener(v -> {
+                tagList.remove(tagName);
+                entryTags.remove(tagName);
+                chipGroup.removeView(chip);
             });
 
             chipGroup.addView(chip);
         }
     }
 
-    protected void showAddTagDialog(){
+    protected void showAddTagDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View view = layoutInflater.inflate(R.layout.add_tag_layout, null);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, mTags);
         final AutoCompleteTextView textViewTag = view.findViewById(R.id.autoCompleteAddTag);
         textViewTag.setAdapter(adapter);
 
         builder.setCancelable(false)
                 .setTitle("Add Tags")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        binding.chipGroup.removeAllViews();
-                        entryTags.add(textViewTag.getText().toString());
-                        setTag(entryTags);
-                    }
-                }).setNeutralButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+                .setPositiveButton("OK", (dialog, which) -> {
+                    binding.chipGroup.removeAllViews();
+                    entryTags.add(textViewTag.getText().toString());
+                    setTag(entryTags);
+                }).setNeutralButton("cancel", (dialog, which) -> dialog.cancel());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
