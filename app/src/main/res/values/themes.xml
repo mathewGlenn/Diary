@@ -33,4 +33,8 @@
     <style name="SmallerText" parent="TextAppearance.AppCompat.Small">
         <item name="android:textSize">11sp</item>
     </style>
+
+    <style name="SplashScreenTheme"> parent = "Theme.AppCompat.NoActionBar">
+    <item  name="android:windowBackground">@drawable/splash_background</item>
+</style>
 </resources>

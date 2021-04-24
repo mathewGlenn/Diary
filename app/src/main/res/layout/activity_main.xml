@@ -10,7 +10,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".entries.EntriesList">
+    tools:context=".entries.EntriesList"
+    android:animateLayoutChanges="true">
 
     <ImageButton
         android:id="@+id/side_menu"
@@ -98,7 +99,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_rawRes="@raw/lotti_flying"
+        app:lottie_rawRes="@raw/man_flying_blue"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         android:layout_marginBottom="70dp"

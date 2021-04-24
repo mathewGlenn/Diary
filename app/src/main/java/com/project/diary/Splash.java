@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.project.diary.app_lock.LockScreen;
 import com.project.diary.entries.EntriesList;
 
 
@@ -31,7 +32,8 @@ public class Splash extends AppCompatActivity {
             public void run() {
 //Check if the user is logged in
                 if (auth.getCurrentUser() != null){
-                    startActivity(new Intent(getApplicationContext(), EntriesList.class));
+                    startActivity(new Intent(getApplicationContext(), LockScreen.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
                 }else {
                     //create anonymous account
@@ -39,7 +41,8 @@ public class Splash extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(getApplicationContext(), " Logged in with an anonymous account", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(), EntriesList.class));
+                            startActivity(new Intent(getApplicationContext(), LockScreen.class));
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {

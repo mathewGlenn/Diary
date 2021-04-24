@@ -4,23 +4,30 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/try_launcher"
-        android:label="My Diary"
+        android:icon="@drawable/logo_launcher"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Diary">
-        <activity android:name=".entries.FavoriteEntries"></activity>
-        <activity android:name=".authentication.Register"></activity>
-        <activity android:name=".authentication.Login"></activity>
-        <activity android:name=".entries.EditEntry" />
-        <activity android:name=".entries.EntryContent" />
-        <activity android:name=".entries.AddEntry" />
-        <activity android:name=".MainActivity2"></activity>
-        <activity android:name=".Splash">
+        <activity android:name=".app_lock.LockScreen">
+        </activity>
+
+        <activity android:name=".Splash1"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".entries.FavoriteEntries" />
+        <activity android:name=".authentication.Register" />
+        <activity android:name=".authentication.Login" />
+        <activity android:name=".entries.EditEntry" />
+        <activity android:name=".entries.EntryContent" />
+        <activity android:name=".entries.AddEntry" />
+        <activity android:name=".MainActivity2" />
+        <activity android:name=".Splash">
+
         </activity>
         <activity android:name=".entries.EntriesList" />
     </application>

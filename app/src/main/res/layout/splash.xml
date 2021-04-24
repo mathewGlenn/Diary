@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/logo"
-        android:src="@drawable/ic_logo_2_quill_cloud"
+        android:src="@drawable/ic_logo_diary_quill_cloud"
         android:adjustViewBounds="true"/>
 
     <com.airbnb.lottie.LottieAnimationView
