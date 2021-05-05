@@ -4,28 +4,39 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.project.diary.EmojiDialog;
 import com.project.diary.R;
 import com.project.diary.databinding.ActivityEditEntryBinding;
+import com.project.diary.model.Entry;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +46,15 @@ import java.util.List;
 import java.util.Map;
 
 public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDialogListener {
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 71;
+
+    // Firebase
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    String imgLink;
+    Boolean imageIsChanged = false;
+
     //for date time picker
     private int dYear, dMonth, dDay, tHour, tMinute;
     FirebaseFirestore firestore;
@@ -45,6 +65,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     ImageButton choose_feeling, imgFavorite;
     String userFeeling = "";
     Boolean entryIsFavorite;
+
 
     List<String> entryTags;
     String[] mTags = {"Happy", "Travel", "Nature", "School"};
@@ -67,6 +88,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         String date = data.getStringExtra("dateOnly");
         String time = data.getStringExtra("timeOnly");
         userFeeling = data.getStringExtra("feeling");
+        imgLink = data.getStringExtra("imgLink");
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
         entryTags = data.getStringArrayListExtra("tags");
 
@@ -79,6 +101,12 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         binding.txtDate.setText(date);
         setTag(entryTags);
         checkUserFeeling();
+
+        if (imgLink != null) {
+            binding.img.setVisibility(View.VISIBLE);
+            Glide.with(this).load(imgLink).into(binding.img);
+        }
+
 
         binding.btnUpdate.setOnClickListener(v -> {
             String editTitle = binding.entryTitle.getText().toString();
@@ -103,12 +131,9 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             entry.put("content", editContent);
             entry.put("date", editDateTime);
             entry.put("feeling", userFeeling);
+            entry.put("image", imgLink);
             entry.put("tags", entryTags);
             entry.put("favorite", entryIsFavorite);
-
-
-            // Entry entry = new Entry(editTitle, editContent,editDateTime,userFeeling,entryTags,entryIsFavorite);
-
 
             reference.update(entry).addOnSuccessListener(aVoid -> {
                 Toast.makeText(EditEntry.this, "Update Successful", Toast.LENGTH_SHORT).show();
@@ -120,6 +145,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 Toast.makeText(EditEntry.this, "Failed updating entries", Toast.LENGTH_SHORT).show();
                 binding.progress.setVisibility(View.INVISIBLE);
             });
+
         });
 
 
@@ -190,14 +216,36 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
         imgFavorite = binding.btnFavorite;
         if (entryIsFavorite) {
-            imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+            imgFavorite.setImageResource(R.drawable.ic_heart_red_1);
             imgFavorite.setTag(2);
         } else {
-            imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
+            imgFavorite.setImageResource(R.drawable.ic_heart_gray_1);
             imgFavorite.setTag(1);
         }
 
         binding.btnTags.setOnClickListener(v -> showAddTagDialog());
+
+
+        binding.btnImg.setOnClickListener(v -> {
+            chooseImage();
+        });
+        binding.img.setOnLongClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(EditEntry.this, binding.img);
+            popupMenu.getMenuInflater().inflate(R.menu.image_options, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.removeImage) {
+                    binding.img.setVisibility(View.GONE);
+                    imgLink = null;
+                    filePath = null;
+                } else if (item.getItemId() == R.id.changeImage){
+                    chooseImage();
+                }
+             return false;
+            });
+
+            return true;
+        });
+
         //end of onCreate
     }
 
@@ -247,11 +295,11 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
     public void isEntryFavorite(View view) {
         if (imgFavorite.getTag().equals(1)) {
-            imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+            imgFavorite.setImageResource(R.drawable.ic_heart_red_1);
             entryIsFavorite = true;
             imgFavorite.setTag(2);
         } else {
-            imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
+            imgFavorite.setImageResource(R.drawable.ic_heart_gray_1);
             entryIsFavorite = false;
             imgFavorite.setTag(1);
         }
@@ -305,5 +353,30 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 }).setNeutralButton("cancel", (dialog, which) -> dialog.cancel());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    // Fire Storage
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                binding.img.setVisibility(View.VISIBLE);
+                binding.img.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
     }
 }

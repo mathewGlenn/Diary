@@ -2,6 +2,7 @@ package com.project.diary.entries;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -13,6 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
@@ -65,6 +71,7 @@ public class EntryContent extends AppCompatActivity {
 
         String date = data.getStringExtra("date");
         String userFeeling = data.getStringExtra("feeling");
+        String imgLink = data.getStringExtra("imgLink");
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
 
         ArrayList<String> entryTags = data.getStringArrayListExtra("tags");
@@ -108,6 +115,36 @@ public class EntryContent extends AppCompatActivity {
                 binding.imgEmoji.setVisibility(View.INVISIBLE);
         }
 
+       //  Glide for displaying image if there is one
+        if (imgLink != null){
+            binding.img.setVisibility(View.VISIBLE);
+            Glide.with(this).load(imgLink).into(binding.img);
+        }
+
+//        if (imgLink != null){
+//            binding.loading.setVisibility(View.VISIBLE);
+//            Glide.with(this)
+//                    .load(imgLink)
+//                    .listener(new RequestListener<Drawable>() {
+//                        @Override
+//                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                            binding.lottieLoading.setVisibility(View.INVISIBLE);
+//                            binding.loadingText.setText("Failed loading image resource. Check your internet connection.");
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                            binding.loading.setVisibility(View.GONE);
+//                            binding.img.setVisibility(View.VISIBLE);
+//                            return false;
+//                        }
+//                    })
+//                    .into(binding.img);
+//        }
+
+
+
 
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +165,7 @@ public class EntryContent extends AppCompatActivity {
                 intent.putStringArrayListExtra("tags", entryTags);
                 intent.putExtra("entryID", data.getStringExtra("entryID"));
                 intent.putExtra("isFavorite", entryIsFavorite);
+                intent.putExtra("imgLink", imgLink);
                 startActivityForResult(intent, 1);
             }
 
@@ -172,12 +210,12 @@ public class EntryContent extends AppCompatActivity {
 
 
         if (entryIsFavorite) {
-            binding.btnFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+            binding.btnFavorite.setImageResource(R.drawable.ic_heart_red_1);
         } else {
             binding.btnFavorite.setVisibility(View.INVISIBLE);
         }
 
-        binding.tfeel.setText(entryIsFavorite.toString());
+        binding.tfeel.setText(imgLink);
 
 
         //end of onCreate

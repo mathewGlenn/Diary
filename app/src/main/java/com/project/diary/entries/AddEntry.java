@@ -2,37 +2,54 @@ package com.project.diary.entries;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.project.diary.EmojiDialog;
 import com.project.diary.R;
 import com.project.diary.databinding.ActivityAddEntryBinding;
 import com.project.diary.model.Entry;
 
+import java.io.IOException;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,10 +58,19 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDialogListener {
 
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 71;
+
+    // Firebase
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
     List<String> arrListTags = new ArrayList<>();
+    String imgLink;
 
     ImageButton imgFavorite;
     ImageButton choose_feeling;
@@ -71,6 +97,8 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
         firestore = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
 
         Calendar calendar;
@@ -94,90 +122,119 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         }
 
 
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.btnSave.setOnClickListener(v -> {
+
+            String entry_title, entry_content, entry_date, entry_time, entry_date_time;
+
+            entry_title = binding.entryTitle.getText().toString();
+            entry_content = binding.entryContent.getText().toString();
+            entry_date = binding.txtDate.getText().toString();
+            entry_time = binding.txtTime.getText().toString();
+            entry_date_time = entry_date.concat(" " + entry_time);
 
 
+            if (entry_content.isEmpty()) {
+                Toast.makeText(AddEntry.this, "No content", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // try add array of tags
-
-                //
-
-
-                String entry_title, entry_content, entry_date, entry_time, entry_date_time;
-
-                entry_title = binding.entryTitle.getText().toString();
-                entry_content = binding.entryContent.getText().toString();
-                entry_date = binding.txtDate.getText().toString();
-                entry_time = binding.txtTime.getText().toString();
-                entry_date_time = entry_date.concat(" " + entry_time);
+            //save note to firestore
+            //notes collection >> multiple notes
 
 
-                if (entry_content.isEmpty()) {
-                    Toast.makeText(AddEntry.this, "No content", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            binding.lottieLoading.setVisibility(View.VISIBLE);
 
-                //save note to firestore
-                //notes collection >> multiple notes
+            DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
+            StorageReference storReference = storageReference.child("images/users/" + user.getUid() + "/" + UUID.randomUUID().toString());
+
+            //////////////////////
+
+            if (filePath != null) {
+                final ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setTitle("Uploading Image...");
+                progressDialog.show();
 
 
-                binding.lottieLoading.setVisibility(View.VISIBLE);
+                UploadTask uploadTask = storReference.putFile(filePath);
 
-                DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
-
-                // Use the custom class to get the title, content, etc
-                Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, arrListTags, addEntryAsFavorite);
-
-                // then save to firestore
-                reference.set(entry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Save successful", Toast.LENGTH_LONG).show();
-                        onBackPressed();
+                uploadTask.addOnProgressListener(snapshot -> {
+                    double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                    progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                }).continueWithTask(task -> {
+                    if (!task.isSuccessful()){
+                        throw  task.getException();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_LONG).show();
-                        binding.lottieLoading.setVisibility(View.INVISIBLE);
+                    return storReference.getDownloadUrl();
+                }).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Uri downloadUri = task.getResult();
+                        imgLink = downloadUri.toString();
+
+                        Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink, arrListTags, addEntryAsFavorite);
+
+                        reference.set(entry).addOnSuccessListener(aVoid -> {
+                            Toast.makeText(getApplicationContext(), "Save successful", Toast.LENGTH_LONG).show();
+                            finish();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_LONG).show();
+                            binding.lottieLoading.setVisibility(View.INVISIBLE);
+                        });
+                    }else {
+                        Toast.makeText(AddEntry.this, "An error has occured", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+
+            } else {
+                Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink, arrListTags, addEntryAsFavorite);
+                reference.set(entry).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), "Save successful", Toast.LENGTH_LONG).show();
+                    finish();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_LONG).show();
+                    binding.lottieLoading.setVisibility(View.INVISIBLE);
+                });
             }
+
+            ///////////////////////////
+
+
+            // Use the custom class to get the title, content, etc
+
+
+            // then save to firestore
+
         });
 
         //Change the time
-        binding.txtTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                //get current time
-                tHour = c.get(Calendar.HOUR_OF_DAY);
-                tMinute = c.get(Calendar.MINUTE);
+        binding.txtTime.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            //get current time
+            tHour = c.get(Calendar.HOUR_OF_DAY);
+            tMinute = c.get(Calendar.MINUTE);
 
-                //Lauch the time picker dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddEntry.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String format;
-                        if (hourOfDay == 0) {
-                            hourOfDay += 12;
-                            format = "AM";
-                        } else if (hourOfDay == 12) {
-                            format = "PM";
-                        } else if (hourOfDay > 12) {
-                            hourOfDay -= 12;
-                            format = "PM";
-                        } else {
-                            format = "AM";
-                        }
-                        String mdate = hourOfDay + ":" + minute + " " + format;
-                        binding.txtTime.setText(mdate);
+            //Lauch the time picker dialog
+            TimePickerDialog timePickerDialog = new TimePickerDialog(AddEntry.this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view1, int hourOfDay, int minute) {
+                    String format;
+                    if (hourOfDay == 0) {
+                        hourOfDay += 12;
+                        format = "AM";
+                    } else if (hourOfDay == 12) {
+                        format = "PM";
+                    } else if (hourOfDay > 12) {
+                        hourOfDay -= 12;
+                        format = "PM";
+                    } else {
+                        format = "AM";
                     }
-                }, tHour, tMinute, false);
-                timePickerDialog.show();
-            }
+                    String mdate = hourOfDay + ":" + minute + " " + format;
+                    binding.txtTime.setText(mdate);
+                }
+            }, tHour, tMinute, false);
+            timePickerDialog.show();
         });
 
         //change the date
@@ -238,10 +295,41 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         });
 
 
-
         // toggle star on/off if user want to save entry as favorite
         imgFavorite = binding.btnFavorite;
         imgFavorite.setTag(1);
+
+        binding.btnImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+
+            }
+        });
+
+        binding.img.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(AddEntry.this, binding.img);
+                popupMenu.getMenuInflater().inflate(R.menu.image_options, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.removeImage){
+                            binding.img.setVisibility(View.GONE);
+                            filePath = null;
+                        }
+                        else if (item.getItemId() == R.id.changeImage){
+                            chooseImage();
+                        }
+
+                        return true;
+                    }
+                });
+                popupMenu.show();
+                return  true;
+            }
+        });
 
         //end of onCreate
     }
@@ -275,7 +363,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         }
     }
 
-    protected void showAddTagDialog(){
+    protected void showAddTagDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View view = layoutInflater.inflate(R.layout.add_tag_layout, null);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -339,14 +427,41 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
     public void isEntryFavorite(View view) {
 
-        if (imgFavorite.getTag().equals(1)){
-            imgFavorite.setImageResource(R.drawable.ic_baseline_star_on_24);
+        if (imgFavorite.getTag().equals(1)) {
+            imgFavorite.setImageResource(R.drawable.ic_heart_red_1);
             addEntryAsFavorite = true;
             imgFavorite.setTag(2);
-        }else{
-            imgFavorite.setImageResource(R.drawable.ic_baseline_star_off_24);
+        } else {
+            imgFavorite.setImageResource(R.drawable.ic_heart_gray_1);
             addEntryAsFavorite = false;
             imgFavorite.setTag(1);
         }
+    }
+
+
+
+    // Fire Storage
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                binding.img.setVisibility(View.VISIBLE);
+                binding.img.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
     }
 }

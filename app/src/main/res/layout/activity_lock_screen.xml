@@ -54,10 +54,10 @@
         app:keypadHorizontalSpacing="36dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="@color/black"
-        app:keypadTextSize="19sp"
-        app:indicatorType="fill"
+        app:keypadTextSize="22sp"
+        app:indicatorType="fillWithAnimation"
         app:keypadDeleteButtonPressedColor="@color/black"
-        app:keypadDeleteButtonSize="22dp"
+        app:keypadDeleteButtonSize="25dp"
         />
 
 

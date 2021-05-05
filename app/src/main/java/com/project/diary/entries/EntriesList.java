@@ -14,10 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -30,6 +32,8 @@ import com.google.firebase.firestore.Query;
 import com.project.diary.MainActivity2;
 import com.project.diary.R;
 import com.project.diary.Splash;
+import com.project.diary.UpImage;
+import com.project.diary.app_lock.ManageDiaryLock;
 import com.project.diary.authentication.Login;
 import com.project.diary.authentication.Register;
 import com.project.diary.databinding.ActivityMainBinding;
@@ -41,6 +45,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import p32929.easypasscodelock.Utils.EasyLock;
+import p32929.easypasscodelock.Utils.LockscreenHandler;
 
 
 public class EntriesList extends AppCompatActivity {
@@ -67,18 +74,6 @@ public class EntriesList extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        ///
-
-        ///
-
-        //if (entryAdapter.getItemCount() == 0){
-        //    binding.lottieNoEntryYet.setVisibility(View.VISIBLE);
-     //       binding.txtCreateFirstEntry.setVisibility(View.VISIBLE);
-       // }else {
-       //     binding.lottieNoEntryYet.setVisibility(View.INVISIBLE);
-      //      binding.txtCreateFirstEntry.setVisibility(View.INVISIBLE);
-        //}
 
 
         firestore = FirebaseFirestore.getInstance();
@@ -173,6 +168,7 @@ public class EntriesList extends AppCompatActivity {
                         i.putStringArrayListExtra("tags", arrLisTags);
                         i.putExtra("entryID", docID);
                         i.putExtra("isFavorite", isFavorite);
+                        i.putExtra("imgLink", entry.getImage());
                         startActivity(i);
                     }
                 });
@@ -248,8 +244,11 @@ public class EntriesList extends AppCompatActivity {
                         Toast.makeText(EntriesList.this, "Account already synced", Toast.LENGTH_SHORT).show();
                     } else
                         startActivity(new Intent(getApplicationContext(), Register.class));
-                } else if (item.getItemId() == R.id.logout)
+                } else if (item.getItemId() == R.id.logout) {
                     checkUser();
+                } else if (item.getItemId() == R.id.diary_lock){
+                    startActivity(new Intent(getApplicationContext(), ManageDiaryLock.class));
+                }
 
                 return true;
             }
@@ -269,8 +268,10 @@ public class EntriesList extends AppCompatActivity {
         binding.btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity2.class));
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
+                startActivity(new Intent(getApplicationContext(), UpImage.class));
+               //verridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
+
+                Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -301,6 +302,14 @@ public class EntriesList extends AppCompatActivity {
             String uname_diary = diaryOwner.concat("'s Diary");
             binding.unameDiary.setText(uname_diary);
         }
+
+        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                entryAdapter.notifyDataSetChanged();
+                binding.refreshLayout.setRefreshing(false);
+            }
+        });
 
 
         // End of onCreate

@@ -15,12 +15,12 @@
 
     <ImageButton
         android:id="@+id/side_menu"
-        android:layout_width="18dp"
+        android:layout_width="35dp"
         android:layout_height="18dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@color/transparrent"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:src="@drawable/side_menu_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -80,15 +80,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp">
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/entrieslist"
-        android:layout_marginTop="50dp"
         android:scrollbars="vertical"
         android:paddingBottom="100dp"
         android:clipToPadding="false"
         android:layoutAnimation="@anim/layout_anim_fall_down"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="0dp"

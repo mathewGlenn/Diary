@@ -5,19 +5,20 @@ import java.util.List;
 
 public class Entry {
 
-    private String title, content, date, feeling;
+    private String title, content, date, feeling, image;
     private List<String> tags;
     private Boolean favorite;
 
     public Entry(){}
 
-    public Entry(String nTitle, String nContent, String nDate, String nFeeling, List<String> nTags, Boolean mIsFavorite){
+    public Entry(String nTitle, String nContent, String nDate, String nFeeling, String nImage, List<String> nTags, Boolean mIsFavorite){
         this.title = nTitle;
         this.content = nContent;
         this.date = nDate;
         this.feeling = nFeeling;
         this.tags = nTags;
         this.favorite = mIsFavorite;
+        this.image = nImage;
     }
 
     public String getTitle() {
@@ -59,5 +60,13 @@ public class Entry {
 
     public Boolean getFavorite() {
         return favorite;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

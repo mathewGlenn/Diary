@@ -2,6 +2,10 @@ package com.project.diary.app_lock;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,24 +38,28 @@ public class LockScreen extends AppCompatActivity {
         //set lock code length
         pinLockView.setPinLength(4);
 
+        // to avoid overlapping toast
+        if (toast != null)
+            toast.cancel();
+
+
+
         //set listener for lock code change
         pinLockView.setPinLockListener(new PinLockListener() {
             @Override
             public void onComplete(String pin) {
                 // verify password
                 if (pin.equals(true_code)){
+
                     startActivity(new Intent(LockScreen.this, EntriesList.class));
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
                 }else{
-                    if (toast != null)
-                        toast.cancel();
-
-                    Toast.makeText(LockScreen.this, "Wrong PIN", Toast.LENGTH_SHORT).show();
                     pinLockView.resetPinLockView();
-
                     toast = Toast.makeText(getApplicationContext(), "Wrong PIN", Toast.LENGTH_SHORT);
-                    toast.show();
+                    toast.setGravity(Gravity.CENTER,0,0);
+                   /// toast.show();
+                    shakeView(indicatorDots);
                 }
             }
 
@@ -77,5 +85,10 @@ public class LockScreen extends AppCompatActivity {
 
         overridePendingTransition(0, 0);
         startActivity(intent);
+    }
+
+    public void shakeView(View view){
+        Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+        view.startAnimation(shake);
     }
 }
