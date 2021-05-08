@@ -1,10 +1,8 @@
 package com.project.diary.entries;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,22 +12,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.project.diary.MainActivity2;
 import com.project.diary.R;
 import com.project.diary.Splash;
 import com.project.diary.UpImage;
@@ -45,9 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import p32929.easypasscodelock.Utils.EasyLock;
-import p32929.easypasscodelock.Utils.LockscreenHandler;
 
 
 public class EntriesList extends AppCompatActivity {
@@ -156,21 +146,19 @@ public class EntriesList extends AppCompatActivity {
                 ArrayList<String> arrLisTags = new ArrayList<>(entryTags);
 
                 // When clicking an Entry from the RecylerView entry list
-                noteViewHolder.view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(v.getContext(), EntryContent.class);
-                        //get the title, content, date, etc to view in the EntryContent.class
-                        i.putExtra("title", entry.getTitle());
-                        i.putExtra("content", entry.getContent());
-                        i.putExtra("date", entry.getDate());
-                        i.putExtra("feeling", entry.getFeeling());
-                        i.putStringArrayListExtra("tags", arrLisTags);
-                        i.putExtra("entryID", docID);
-                        i.putExtra("isFavorite", isFavorite);
-                        i.putExtra("imgLink", entry.getImage());
-                        startActivity(i);
-                    }
+                noteViewHolder.view.setOnClickListener(v -> {
+                    Intent i1 = new Intent(v.getContext(), EntryContent.class);
+                    //get the title, content, date, etc to view in the EntryContent.class
+                    i1.putExtra("title", entry.getTitle());
+                    i1.putExtra("content", entry.getContent());
+                    i1.putExtra("date", entry.getDate());
+                    i1.putExtra("feeling", entry.getFeeling());
+                    i1.putStringArrayListExtra("tags", arrLisTags);
+                    i1.putExtra("entryID", docID);
+                    i1.putExtra("isFavorite", isFavorite);
+                    i1.putExtra("imgLink", entry.getImage_link());
+                    i1.putExtra("imgName", entry.getImage_name());
+                    startActivity(i1);
                 });
             }
 
@@ -184,13 +172,13 @@ public class EntriesList extends AppCompatActivity {
 
             @Override
             public void onDataChanged() {
-                if (getItemCount() == 0){
+                if (getItemCount() == 0) {
                     binding.lottieNoEntryYet.setVisibility(View.VISIBLE);
-                       binding.txtCreateFirstEntry.setVisibility(View.VISIBLE);
-                 }else {
-                     binding.lottieNoEntryYet.setVisibility(View.INVISIBLE);
-                      binding.txtCreateFirstEntry.setVisibility(View.INVISIBLE);
-            }
+                    binding.txtCreateFirstEntry.setVisibility(View.VISIBLE);
+                } else {
+                    binding.lottieNoEntryYet.setVisibility(View.INVISIBLE);
+                    binding.txtCreateFirstEntry.setVisibility(View.INVISIBLE);
+                }
             }
         };
 
@@ -201,12 +189,9 @@ public class EntriesList extends AppCompatActivity {
         entriesList.setAdapter(entryAdapter);
 
 
-        binding.addEntry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddEntry.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        binding.addEntry.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), AddEntry.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
 
@@ -214,65 +199,53 @@ public class EntriesList extends AppCompatActivity {
         drawerLayout = binding.draweLayout;
 
 
-        binding.sideMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.sideMenu.setOnClickListener(v -> {
 
-                if (!drawerLayout.isDrawerOpen(GravityCompat.START))
-                    drawerLayout.openDrawer(GravityCompat.START);
-                else
-                    drawerLayout.closeDrawer(GravityCompat.END);
-            }
+            if (!drawerLayout.isDrawerOpen(GravityCompat.START))
+                drawerLayout.openDrawer(GravityCompat.START);
+            else
+                drawerLayout.closeDrawer(GravityCompat.END);
         });
 
 
-        binding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.login) {
-                    if (user.isAnonymous()) {
-                        //if the user is using a temporary account and want to login, display a warning that
-                        //doing so will delete his data
-                        //unless he register his account
-                        displayLoginAlert();
-                    } else {
-                        startActivity(new Intent(getApplicationContext(), Login.class));
-                        finish();
-                    }
-                } else if (item.getItemId() == R.id.sync_account) {
-                    if (!user.isAnonymous()) {
-                        Toast.makeText(EntriesList.this, "Account already synced", Toast.LENGTH_SHORT).show();
-                    } else
-                        startActivity(new Intent(getApplicationContext(), Register.class));
-                } else if (item.getItemId() == R.id.logout) {
-                    checkUser();
-                } else if (item.getItemId() == R.id.diary_lock){
-                    startActivity(new Intent(getApplicationContext(), ManageDiaryLock.class));
+        binding.navView.setNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.login) {
+                if (user.isAnonymous()) {
+                    //if the user is using a temporary account and want to login, display a warning that
+                    //doing so will delete his data
+                    //unless he register his account
+                    displayLoginAlert();
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finish();
                 }
-
-                return true;
+            } else if (item.getItemId() == R.id.sync_account) {
+                if (!user.isAnonymous()) {
+                    Toast.makeText(EntriesList.this, "Account already synced", Toast.LENGTH_SHORT).show();
+                } else
+                    startActivity(new Intent(getApplicationContext(), Register.class));
+            } else if (item.getItemId() == R.id.logout) {
+                checkUser();
+            } else if (item.getItemId() == R.id.diary_lock) {
+                startActivity(new Intent(getApplicationContext(), ManageDiaryLock.class));
             }
+
+            return true;
         });
 
 
         //favorite entries button
-        binding.btnHeart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FavoriteEntries.class));
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
-            }
+        binding.btnHeart.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), FavoriteEntries.class));
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
         });
 
         //show profile button
-        binding.btnProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), UpImage.class));
-               //verridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
+        binding.btnProfile.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), UpImage.class));
+            //verridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
 
-                Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
         });
 
         //display username and email on navigation header
@@ -303,12 +276,9 @@ public class EntriesList extends AppCompatActivity {
             binding.unameDiary.setText(uname_diary);
         }
 
-        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                entryAdapter.notifyDataSetChanged();
-                binding.refreshLayout.setRefreshing(false);
-            }
+        binding.refreshLayout.setOnRefreshListener(() -> {
+            entryAdapter.notifyDataSetChanged();
+            binding.refreshLayout.setRefreshing(false);
         });
 
 
@@ -385,39 +355,20 @@ public class EntriesList extends AppCompatActivity {
         AlertDialog.Builder logoutWarning = new AlertDialog.Builder(this);
         logoutWarning.setTitle("Logout")
                 .setMessage("You are using a temporary account. If you logout now all your data will be lost.")
-                .setPositiveButton("Sync Account", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(getApplicationContext(), Register.class));
+                .setPositiveButton("Sync Account", (dialog, which) -> {
+                    startActivity(new Intent(getApplicationContext(), Register.class));
+                    finish();
+                }).setNegativeButton("Logout", (dialog, which) -> {
+            //if user logout with anonymous account
+            //delete  all notes and delete anonymous user
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(EntriesList.this);
+            builder.setMessage("Are you sure to logout?")
+                    .setPositiveButton("Yes", (dialog1, which1) -> user.delete().addOnSuccessListener(aVoid -> {
+                        startActivity(new Intent(getApplicationContext(), Splash.class));
                         finish();
-                    }
-                }).setNegativeButton("Logout", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //if user logout with anonymous account
-                //delete  all notes and delete anonymous user
+                    })).setNegativeButton("Cancel", (dialog12, which12) -> dialog12.dismiss()).show();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(EntriesList.this);
-                builder.setMessage("Are you sure to logout?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        startActivity(new Intent(getApplicationContext(), Splash.class));
-                                        finish();
-                                    }
-                                });
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
-            }
         });
         logoutWarning.show();
     }
@@ -426,18 +377,12 @@ public class EntriesList extends AppCompatActivity {
         AlertDialog.Builder loginWarning = new AlertDialog.Builder(this)
                 .setTitle("You are using a temporary account")
                 .setMessage("If you login with an existing account, your temporary data will be deleted. Do you want to sync your account?")
-                .setPositiveButton("Sync Account", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(getApplicationContext(), Register.class));
-                        finish();
-                    }
-                }).setNegativeButton("It's OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(getApplicationContext(), Login.class));
-                        finish();
-                    }
+                .setPositiveButton("Sync Account", (dialog, which) -> {
+                    startActivity(new Intent(getApplicationContext(), Register.class));
+                    finish();
+                }).setNegativeButton("It's OK", (dialog, which) -> {
+                    startActivity(new Intent(getApplicationContext(), Login.class));
+                    finish();
                 });
         loginWarning.show();
 

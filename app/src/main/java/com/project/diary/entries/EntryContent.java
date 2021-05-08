@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -72,6 +75,7 @@ public class EntryContent extends AppCompatActivity {
         String date = data.getStringExtra("date");
         String userFeeling = data.getStringExtra("feeling");
         String imgLink = data.getStringExtra("imgLink");
+        String imgName = data.getStringExtra("imgName");
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
 
         ArrayList<String> entryTags = data.getStringArrayListExtra("tags");
@@ -119,6 +123,12 @@ public class EntryContent extends AppCompatActivity {
         if (imgLink != null){
             binding.img.setVisibility(View.VISIBLE);
             Glide.with(this).load(imgLink).into(binding.img);
+
+            DrawableCompat.setTint(binding.btnBack.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+            DrawableCompat.setTint(binding.btnDelete.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+            DrawableCompat.setTint(binding.btnEdit.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+        }else {
+            setMargins(binding.scrollView, 0,90,0,0);
         }
 
 //        if (imgLink != null){
@@ -146,66 +156,37 @@ public class EntryContent extends AppCompatActivity {
 
 
 
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        binding.btnBack.setOnClickListener(v -> finish());
 
-        binding.btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), EditEntry.class);
-                intent.putExtra("title", data.getStringExtra("title"));
-                intent.putExtra("content", data.getStringExtra("content"));
-                intent.putExtra("dateOnly", binding.txtDate.getText().toString());
-                intent.putExtra("timeOnly", binding.txtTime.getText().toString());
-                intent.putExtra("feeling", data.getStringExtra("feeling"));
-                intent.putStringArrayListExtra("tags", entryTags);
-                intent.putExtra("entryID", data.getStringExtra("entryID"));
-                intent.putExtra("isFavorite", entryIsFavorite);
-                intent.putExtra("imgLink", imgLink);
-                startActivityForResult(intent, 1);
-            }
-
-
+        binding.btnEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), EditEntry.class);
+            intent.putExtra("title", data.getStringExtra("title"));
+            intent.putExtra("content", data.getStringExtra("content"));
+            intent.putExtra("dateOnly", binding.txtDate.getText().toString());
+            intent.putExtra("timeOnly", binding.txtTime.getText().toString());
+            intent.putExtra("feeling", data.getStringExtra("feeling"));
+            intent.putStringArrayListExtra("tags", entryTags);
+            intent.putExtra("entryID", data.getStringExtra("entryID"));
+            intent.putExtra("isFavorite", entryIsFavorite);
+            intent.putExtra("imgLink", imgLink);
+            intent.putExtra("imgName", imgName);
+            startActivityForResult(intent, 1);
         });
 
 
-        binding.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(EntryContent.this);
-                alertBuilder.setTitle("Confirm deletion");
-                alertBuilder.setMessage("Are you sure to delete this entry? It can not be undone.")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document(data.getStringExtra("entryID"));
-                                reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        onBackPressed();
-                                        Toast.makeText(EntryContent.this, "Entry deleted", Toast.LENGTH_SHORT).show();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(EntryContent.this, "Error deleting entry", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
-                            }
-                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alertBuilder.show();
-            }
+        binding.btnDelete.setOnClickListener(v -> {
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(EntryContent.this);
+            alertBuilder.setTitle("Confirm deletion");
+            alertBuilder.setMessage("Are you sure to delete this entry? It can not be undone.")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document(data.getStringExtra("entryID"));
+                        reference.delete().addOnSuccessListener(aVoid -> {
+                            onBackPressed();
+                            Toast.makeText(EntryContent.this, "Entry deleted", Toast.LENGTH_SHORT).show();
+                        }).addOnFailureListener(e -> Toast.makeText(EntryContent.this, "Error deleting entry", Toast.LENGTH_SHORT).show());
+                    }).setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            alertBuilder.show();
         });
 
 
@@ -216,7 +197,6 @@ public class EntryContent extends AppCompatActivity {
         }
 
         binding.tfeel.setText(imgLink);
-
 
         //end of onCreate
 
@@ -240,4 +220,14 @@ public class EntryContent extends AppCompatActivity {
             chipGroup.addView(chip);
         }
     }
+
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
+    }
+
+
 }

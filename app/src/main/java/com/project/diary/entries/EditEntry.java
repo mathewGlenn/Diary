@@ -2,25 +2,28 @@ package com.project.diary.entries;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
@@ -31,10 +34,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.project.diary.EmojiDialog;
 import com.project.diary.R;
 import com.project.diary.databinding.ActivityEditEntryBinding;
-import com.project.diary.model.Entry;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -44,6 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDialogListener {
     private Uri filePath;
@@ -51,13 +55,15 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
     // Firebase
     FirebaseStorage storage;
-    StorageReference storageReference;
-    String imgLink;
-    Boolean imageIsChanged = false;
+    StorageReference imgReference, storageReference;
+    String imgLink, imgName;
+    Drawable oldImage;
+
 
     //for date time picker
     private int dYear, dMonth, dDay, tHour, tMinute;
     FirebaseFirestore firestore;
+    DocumentReference reference;
     Intent data;
     FirebaseUser user;
     private ActivityEditEntryBinding binding;
@@ -65,6 +71,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     ImageButton choose_feeling, imgFavorite;
     String userFeeling = "";
     Boolean entryIsFavorite;
+    String editTitle, editContent, editDate, editTime, editDateTime;
 
 
     List<String> entryTags;
@@ -78,10 +85,16 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         View view = binding.getRoot();
         setContentView(view);
 
+        oldImage = binding.img.getDrawable();
+
         data = getIntent();
 
         firestore = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document(data.getStringExtra("entryID"));
+
 
         String title = data.getStringExtra("title");
         String content = data.getStringExtra("content");
@@ -89,6 +102,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         String time = data.getStringExtra("timeOnly");
         userFeeling = data.getStringExtra("feeling");
         imgLink = data.getStringExtra("imgLink");
+        imgName = data.getStringExtra("imgName");
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
         entryTags = data.getStringArrayListExtra("tags");
 
@@ -105,15 +119,19 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         if (imgLink != null) {
             binding.img.setVisibility(View.VISIBLE);
             Glide.with(this).load(imgLink).into(binding.img);
+            setButtonsToWhite();
+        } else {
+            setMargins(binding.scrollView, 0, 90, 0, 0);
         }
 
 
+
         binding.btnUpdate.setOnClickListener(v -> {
-            String editTitle = binding.entryTitle.getText().toString();
-            String editContent = binding.entryContent.getText().toString();
-            String editDate = binding.txtDate.getText().toString();
-            String editTime = binding.txtTime.getText().toString();
-            String editDateTime = editDate.concat(" " + editTime);
+             editTitle = binding.entryTitle.getText().toString();
+             editContent = binding.entryContent.getText().toString();
+             editDate = binding.txtDate.getText().toString();
+             editTime = binding.txtTime.getText().toString();
+             editDateTime = editDate.concat(" " + editTime);
 
             if (editContent.isEmpty()) {
                 Toast.makeText(EditEntry.this, "Entry content is empty", Toast.LENGTH_SHORT).show();
@@ -124,27 +142,48 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
             //save edited note
 
-            DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document(data.getStringExtra("entryID"));
 
-            Map<String, Object> entry = new HashMap<>();
-            entry.put("title", editTitle);
-            entry.put("content", editContent);
-            entry.put("date", editDateTime);
-            entry.put("feeling", userFeeling);
-            entry.put("image", imgLink);
-            entry.put("tags", entryTags);
-            entry.put("favorite", entryIsFavorite);
+            StorageReference storReference = storageReference.child("images/users/" + user.getUid() + "/" + UUID.randomUUID().toString());
 
-            reference.update(entry).addOnSuccessListener(aVoid -> {
-                Toast.makeText(EditEntry.this, "Update Successful", Toast.LENGTH_SHORT).show();
-                binding.progress.setVisibility(View.INVISIBLE);
-                //finishing Entry Content and going directly to Entries List
-                setResult(RESULT_OK, new Intent());
-                finish();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(EditEntry.this, "Failed updating entries", Toast.LENGTH_SHORT).show();
-                binding.progress.setVisibility(View.INVISIBLE);
-            });
+            //
+
+            if (filePath != null) {
+
+                if (binding.img.getDrawable() != oldImage) {
+                    StorageReference newImgRef = storageReference.child("images/users/" + user.getUid() + "/" + imgName);
+
+                    final ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setTitle("Uploading Image...");
+                    progressDialog.show();
+
+
+                    UploadTask uploadTask = newImgRef.putFile(filePath);
+                    uploadTask.addOnProgressListener(snapshot -> {
+                        double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                    }).continueWithTask(task->{
+                        if (!task.isSuccessful()){
+                            throw task.getException();
+                        }
+                        return newImgRef.getDownloadUrl();
+                    }).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            Uri downloadUri = task.getResult();
+                            imgLink = downloadUri.toString();
+
+                            updateEntry();
+                        }
+                    });
+                } else {
+
+                updateEntry();
+
+                }
+            }
+            else{
+                updateEntry();
+            }
+
 
         });
 
@@ -185,26 +224,22 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             dMonth = c.get(Calendar.MONTH);
             dDay = c.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(EditEntry.this, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view12, int year, int monthOfYear, int dayOfMonth) {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(EditEntry.this, (view12, year, monthOfYear, dayOfMonth) -> {
 
-                    //set text
-                    //format date
+                //set text
+                //format date
 
+                SimpleDateFormat originalFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
 
-                    SimpleDateFormat originalFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", java.util.Locale.getDefault());
-
-                    String origDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                    Date formattedDate = null;
-                    try {
-                        formattedDate = originalFormat.parse(origDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    binding.txtDate.setText(dateFormat.format(formattedDate));
+                String origDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                Date formattedDate = null;
+                try {
+                    formattedDate = originalFormat.parse(origDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                binding.txtDate.setText(dateFormat.format(formattedDate));
             }, dYear, dMonth, dDay);
             datePickerDialog.show();
         });
@@ -237,11 +272,15 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                     binding.img.setVisibility(View.GONE);
                     imgLink = null;
                     filePath = null;
-                } else if (item.getItemId() == R.id.changeImage){
+                    setMargins(binding.scrollView, 0, 90, 0, 0);
+                    setButtonsToBlack();
+                } else if (item.getItemId() == R.id.changeImage) {
                     chooseImage();
+
                 }
-             return false;
+                return false;
             });
+            popupMenu.show();
 
             return true;
         });
@@ -366,6 +405,9 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 binding.img.setVisibility(View.VISIBLE);
                 binding.img.setImageBitmap(bitmap);
+
+                setMargins(binding.scrollView, 0, 0, 0, 0);
+                setButtonsToWhite();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -378,5 +420,56 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
+    }
+
+    public static void setMargins(View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
+    }
+
+    public void setButtonsToWhite() {
+        DrawableCompat.setTint(binding.btnImg.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+        DrawableCompat.setTint(binding.btnClose.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+        DrawableCompat.setTint(binding.btnVoiceRec.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+        DrawableCompat.setTint(binding.btnTags.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+        binding.btnUpdate.setBackgroundResource(R.drawable.button_white_bg);
+        binding.btnUpdate.setTextColor(getResources().getColor(R.color.black));
+    }
+
+    public void setButtonsToBlack() {
+        DrawableCompat.setTint(binding.btnImg.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.black));
+        DrawableCompat.setTint(binding.btnClose.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.black));
+        DrawableCompat.setTint(binding.btnVoiceRec.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.black));
+        DrawableCompat.setTint(binding.btnTags.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.black));
+        binding.btnUpdate.setBackgroundResource(R.drawable.button_black_bg);
+        binding.btnUpdate.setTextColor(getResources().getColor(R.color.white));
+    }
+
+    public void deleteImage() {
+
+    }
+    public void updateEntry(){
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("title", editTitle);
+        entry.put("content", editContent);
+        entry.put("date", editDateTime);
+        entry.put("feeling", userFeeling);
+        entry.put("image_link", imgLink);
+        entry.put("tags", entryTags);
+        entry.put("favorite", entryIsFavorite);
+
+        reference.update(entry).addOnSuccessListener(aVoid -> {
+            Toast.makeText(EditEntry.this, "Update Successful", Toast.LENGTH_SHORT).show();
+            binding.progress.setVisibility(View.INVISIBLE);
+            //finishing Entry Content and going directly to Entries List
+            setResult(RESULT_OK, new Intent());
+            finish();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(EditEntry.this, "Failed updating entries", Toast.LENGTH_SHORT).show();
+            binding.progress.setVisibility(View.INVISIBLE);
+        });
     }
 }

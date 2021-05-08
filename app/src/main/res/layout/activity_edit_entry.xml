@@ -10,6 +10,7 @@
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:elevation="1dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
@@ -73,135 +74,147 @@
             app:layout_constraintTop_toTopOf="@id/btn_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/img"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:longClickable="true"
-        android:scaleType="centerInside"
-        android:visibility="gone"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/action_bar"/>
+        app:layout_constraintTop_toTopOf="parent">
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_entry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/img">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
 
-            <TextView
-                android:id="@+id/txt_time"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:text="5:07 PM"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/lineSep"
-                android:layout_width="1dp"
-                android:layout_height="15dp"
-                android:layout_marginStart="10dp"
-                android:background="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/txt_time"
-                app:layout_constraintStart_toEndOf="@id/txt_time"
-                app:layout_constraintTop_toTopOf="@id/txt_time" />
-
-            <TextView
-                android:id="@+id/txt_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:text="Tue, 30 Mar, 2021"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/lineSep"
-                app:layout_constraintStart_toEndOf="@id/lineSep"
-                app:layout_constraintTop_toTopOf="@id/lineSep" />
+                android:adjustViewBounds="true"
+                android:longClickable="true"
+                android:scaleType="centerInside"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/action_bar" />
 
 
-            <ImageButton
-                android:id="@+id/btn_favorite"
-                android:layout_width="35dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/ic_heart_gray_1"
-                android:onClick="isEntryFavorite"
-                android:scaleType="fitCenter"
-                app:layout_constraintEnd_toStartOf="@id/btn_emoji"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/btn_emoji"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/circle_shape"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_happy_svg"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/entry_title"
-                style="@style/Widget.AppCompat.EditText"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_entry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/transparrent"
-                android:fontFamily="@font/montserrat_semi_bold"
-                android:hint="Title"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/lineSep" />
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/img">
 
-            <EditText
-                android:id="@+id/entry_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/transparrent"
-                android:fontFamily="@font/montserrat_medium"
-                android:hint="Write your story here..."
-                android:lineSpacingExtra="10dp"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                app:layout_constraintTop_toBottomOf="@id/entry_title" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="100dp"
-                android:backgroundTint="@color/black"
-                android:paddingBottom="25dp"
-                app:chipMinTouchTargetSize="0dp"
-                app:chipSpacingVertical="2dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/entry_content"
-                app:singleLine="true" />
+                    <TextView
+                        android:id="@+id/txt_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:text="5:07 PM"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/lineSep"
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@id/txt_time"
+                        app:layout_constraintStart_toEndOf="@id/txt_time"
+                        app:layout_constraintTop_toTopOf="@id/txt_time" />
+
+                    <TextView
+                        android:id="@+id/txt_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:text="Tue, 30 Mar, 2021"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@id/lineSep"
+                        app:layout_constraintStart_toEndOf="@id/lineSep"
+                        app:layout_constraintTop_toTopOf="@id/lineSep" />
 
 
+                    <ImageButton
+                        android:id="@+id/btn_favorite"
+                        android:layout_width="35dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/ic_heart_gray_1"
+                        android:onClick="isEntryFavorite"
+                        android:scaleType="fitCenter"
+                        app:layout_constraintEnd_toStartOf="@id/btn_emoji"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+                    <ImageButton
+                        android:id="@+id/btn_emoji"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/circle_shape"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_happy_svg"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/entry_title"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/transparrent"
+                        android:fontFamily="@font/montserrat_semi_bold"
+                        android:hint="Title"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/lineSep" />
+
+                    <EditText
+                        android:id="@+id/entry_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/transparrent"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:hint="Write your story here..."
+                        android:lineSpacingExtra="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:layout_constraintTop_toBottomOf="@id/entry_title" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="100dp"
+                        android:backgroundTint="@color/black"
+                        android:paddingBottom="25dp"
+                        app:chipMinTouchTargetSize="0dp"
+                        app:chipSpacingVertical="2dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/entry_content"
+                        app:singleLine="true" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
 
     <ProgressBar

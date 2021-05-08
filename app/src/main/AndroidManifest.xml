@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.project.diary">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -10,7 +13,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Diary">
-        <activity android:name=".UpImage"></activity>
+        <activity android:name=".UpAudio">
+        </activity>
+        <activity android:name=".UpImage" />
         <activity android:name=".notification.ManageNotification" />
         <activity android:name=".app_lock.ManageDiaryLock" />
         <activity android:name=".app_lock.LockScreen" />

@@ -71,6 +71,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
     List<String> arrListTags = new ArrayList<>();
     String imgLink;
+    String imageName;
 
     ImageButton imgFavorite;
     ImageButton choose_feeling;
@@ -145,11 +146,15 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
             binding.lottieLoading.setVisibility(View.VISIBLE);
 
             DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
-            StorageReference storReference = storageReference.child("images/users/" + user.getUid() + "/" + UUID.randomUUID().toString());
+
 
             //////////////////////
 
             if (filePath != null) {
+
+                 imageName = UUID.randomUUID().toString();
+                StorageReference storReference = storageReference.child("images/users/" + user.getUid() + "/" + imageName);
+
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Uploading Image...");
                 progressDialog.show();
@@ -170,7 +175,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                         Uri downloadUri = task.getResult();
                         imgLink = downloadUri.toString();
 
-                        Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink, arrListTags, addEntryAsFavorite);
+                        Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink,imageName, arrListTags, addEntryAsFavorite);
 
                         reference.set(entry).addOnSuccessListener(aVoid -> {
                             Toast.makeText(getApplicationContext(), "Save successful", Toast.LENGTH_LONG).show();
@@ -187,7 +192,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
 
             } else {
-                Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink, arrListTags, addEntryAsFavorite);
+                Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink, imageName, arrListTags, addEntryAsFavorite);
                 reference.set(entry).addOnSuccessListener(aVoid -> {
                     Toast.makeText(getApplicationContext(), "Save successful", Toast.LENGTH_LONG).show();
                     finish();
