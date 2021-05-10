@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -84,6 +85,21 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         binding = ActivityEditEntryBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        // hide view
+        binding.headColor.setAlpha(0f);
+        //
+        binding.scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int maxDistance = binding.img.getHeight();
+                int movement = binding.scrollView.getScrollY();
+                float alphaFactor = ((movement * 1.0f)/ (maxDistance - binding.headColor.getHeight()));
+                if (movement >= 0 && movement <= maxDistance){
+                    binding.headColor.setAlpha(alphaFactor);
+                }
+            }
+        });
 
         oldImage = binding.img.getDrawable();
 

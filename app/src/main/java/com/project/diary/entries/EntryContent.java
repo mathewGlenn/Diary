@@ -1,12 +1,15 @@
 package com.project.diary.entries;
 
+import android.app.slice.Slice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -66,6 +69,23 @@ public class EntryContent extends AppCompatActivity {
         binding = ActivityEntryContentBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        // hide view
+        binding.headColor.setAlpha(0f);
+        //
+        binding.scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int maxDistance = binding.img.getHeight();
+                int movement = binding.scrollView.getScrollY();
+                float alphaFactor = ((movement * 1.0f)/ (maxDistance - binding.headColor.getHeight()));
+                if (movement >= 0 && movement <= maxDistance){
+                    binding.headColor.setAlpha(alphaFactor);
+                }
+            }
+        });
+
+        setupWindowAnimations();
 
         firestore = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -127,6 +147,8 @@ public class EntryContent extends AppCompatActivity {
             DrawableCompat.setTint(binding.btnBack.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
             DrawableCompat.setTint(binding.btnDelete.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
             DrawableCompat.setTint(binding.btnEdit.getDrawable(), ContextCompat.getColor(getApplicationContext(), R.color.white2));
+
+
         }else {
             setMargins(binding.scrollView, 0,90,0,0);
         }
@@ -227,6 +249,12 @@ public class EntryContent extends AppCompatActivity {
             p.setMargins(l, t, r, b);
             v.requestLayout();
         }
+    }
+
+    private void setupWindowAnimations(){
+        Slide slide = new Slide();
+        slide.setDuration(1000);
+        getWindow().setExitTransition(slide);
     }
 
 

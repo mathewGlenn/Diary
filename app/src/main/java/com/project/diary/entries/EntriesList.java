@@ -25,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.project.diary.R;
 import com.project.diary.Splash;
-import com.project.diary.UpImage;
 import com.project.diary.app_lock.ManageDiaryLock;
 import com.project.diary.authentication.Login;
 import com.project.diary.authentication.Register;
@@ -242,10 +241,10 @@ public class EntriesList extends AppCompatActivity {
 
         //show profile button
         binding.btnProfile.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), UpImage.class));
+            startActivity(new Intent(getApplicationContext(), EntryImages.class));
             //verridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
 
-            Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
         });
 
         //display username and email on navigation header
