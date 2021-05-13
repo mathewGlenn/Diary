@@ -28,6 +28,7 @@ import com.project.diary.R;
 import com.project.diary.databinding.ActivityMeBinding;
 import com.project.diary.entries.EntryImages;
 import com.project.diary.entries.FeelingFilteredEntries;
+import com.project.diary.entries.TagFilteredEntry;
 import com.project.diary.entries.ViewImage;
 import com.project.diary.model.Feelings;
 import com.project.diary.model.Profile;
@@ -189,6 +190,12 @@ public class UserProfile extends AppCompatActivity {
             chip.setChipBackgroundColorResource(R.color.black);
             chip.setTextColor(getResources().getColor(R.color.white));
             chip.setEnsureMinTouchTargetSize(false);
+
+            chip.setOnClickListener(v -> {
+                Intent intent = new Intent(this, TagFilteredEntry.class);
+                intent.putExtra("tag_name", tagName);
+                startActivity(intent);
+            });
 
             chipGroup.addView(chip);
         }

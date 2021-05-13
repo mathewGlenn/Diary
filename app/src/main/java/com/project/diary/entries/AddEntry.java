@@ -78,10 +78,10 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
     ImageButton choose_feeling;
     //for emoji
     String userFeeling = "happy";
+    ArrayList<String> allUniqueTags;
 
     //for date time picker
     private int dYear, dMonth, dDay, tHour, tMinute;
-    String[] mTags = {"Happy", "Travel", "Nature", "School"};
     Boolean addEntryAsFavorite = false;
 
     DocumentReference counterReference, tagsReference;
@@ -89,12 +89,19 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
     FirebaseUser user;
     private ActivityAddEntryBinding binding;
 
+    Intent data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAddEntryBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        data = getIntent();
+
+       allUniqueTags = data.getStringArrayListExtra("unique_tags");
+
 
         choose_feeling = binding.btnEmoji;
 
@@ -383,7 +390,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         builder.setView(view);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, mTags);
+                android.R.layout.simple_dropdown_item_1line, allUniqueTags);
         final AutoCompleteTextView textViewTag = view.findViewById(R.id.autoCompleteAddTag);
         textViewTag.setAdapter(adapter);
 

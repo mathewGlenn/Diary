@@ -221,7 +221,9 @@ public class EntriesList extends AppCompatActivity {
 
 
         binding.addEntry.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), AddEntry.class));
+            Intent intent = new Intent(this, AddEntry.class);
+            intent.putStringArrayListExtra("unique_tags", (ArrayList<String>) allUniqueTags);
+            startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
