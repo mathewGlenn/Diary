@@ -5,10 +5,11 @@
     android:layout_height="wrap_content">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="170dp"
         android:adjustViewBounds="true"
-        android:layout_margin="1dp"
-        android:scaleType="centerInside"
+        android:layout_marginVertical="2dp"
+        android:layout_marginHorizontal="1dp"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/imgAll" />

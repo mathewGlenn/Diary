@@ -14,10 +14,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Diary">
-        <activity android:name=".entries.ViewImage"></activity>
+        <activity android:name=".entries.FeelingFilteredEntries"></activity>
+        <activity android:name=".profile.EditProfile" />
+        <activity android:name=".entries.ViewImage" />
         <activity android:name=".entries.EntryImages" />
-        <activity android:name=".app_lock.Me" />
         <activity android:name=".UpAudio" />
+        <activity android:name=".profile.UserProfile" />
         <activity android:name=".UpImage" />
         <activity android:name=".notification.ManageNotification" />
         <activity android:name=".app_lock.ManageDiaryLock" />

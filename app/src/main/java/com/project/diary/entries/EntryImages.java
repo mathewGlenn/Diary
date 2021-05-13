@@ -2,13 +2,17 @@ package com.project.diary.entries;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,15 +28,24 @@ import com.project.diary.model.Entry;
 public class EntryImages extends AppCompatActivity {
     ImageView img;
     RecyclerView recyclerViewImages;
+    boolean linearLayout;
 
     FirebaseFirestore firestore;
     FirestoreRecyclerAdapter<Entry, EntryImages.NoteViewHolder> imgAdapter;
     FirebaseUser user;
     FirebaseAuth auth;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_images);
+
+        SharedPreferences preferences = this.getSharedPreferences("LayoutPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        linearLayout = preferences.getBoolean("linearLayout", true);
 
         recyclerViewImages = findViewById(R.id.all_img_recycler);
 
@@ -40,7 +53,7 @@ public class EntryImages extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        Query query = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").whereNotEqualTo("image_link", null);
+        Query query = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").whereNotEqualTo("image_link", null).orderBy("image_link").orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Entry> allImages = new FirestoreRecyclerOptions.Builder<Entry>()
                 .setQuery(query, Entry.class)
                 .build();
@@ -53,6 +66,15 @@ public class EntryImages extends AppCompatActivity {
                 Glide.with(EntryImages.this).load(imgLink).into(noteViewHolder.imageView);
                 //noteViewHolder.txt.setText(entry.getImage_name());
 
+                noteViewHolder.view.setOnClickListener(v->{
+                    Intent intent = new Intent(v.getContext(),ViewImage.class);
+
+                    intent.putExtra("imgLink", imgLink);
+                    intent.putExtra("date", entry.getDate());
+                    startActivity(intent);
+
+                });
+
             }
 
             @NonNull
@@ -63,7 +85,32 @@ public class EntryImages extends AppCompatActivity {
             }
         };
 
-        recyclerViewImages.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+
+        if (linearLayout){
+            recyclerViewImages.setLayoutManager(new LinearLayoutManager(this));
+        }else {
+            recyclerViewImages.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        }
+
+        ImageButton changeLayout = findViewById(R.id.btn_changeLayout);
+        changeLayout.setOnClickListener(v->{
+            if (linearLayout){
+                editor.putBoolean("linearLayout", false);
+                editor.commit();
+                changeLayout.setImageResource(R.drawable.ic_linear);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }else{
+                editor.putBoolean("linearLayout", true);
+                editor.commit();
+                changeLayout.setImageResource(R.drawable.ic_baseline_grid_on_24);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+
         recyclerViewImages.setAdapter(imgAdapter);
     }
     public class NoteViewHolder extends RecyclerView.ViewHolder {

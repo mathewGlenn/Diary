@@ -5,45 +5,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".entries.EntryImages">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:background="@color/transparrent"
-            android:tint="@color/black"
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_arrow_back_24"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/txt_favorites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All Images"
             android:fontFamily="@font/montserrat_bold"
-            android:textSize="20sp"
+            android:text="All Images"
             android:textColor="@color/black"
-            android:id="@+id/txt_favorites"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_back"
-            app:layout_constraintBottom_toBottomOf="@id/btn_back" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_back" />
+
+        <ImageButton
+            android:id="@+id/btn_changeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@color/transparrent"
+            android:src="@drawable/ic_baseline_grid_on_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_img_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/all_img_recycler"
-        android:scrollbars="vertical"
         android:layout_marginTop="50dp"
-        android:paddingBottom="100dp"
         android:clipToPadding="false"
-        android:layoutAnimation="@anim/layout_anim_fall_down"/>
+        android:layoutAnimation="@anim/layout_anim_fall_down"
+        android:paddingBottom="100dp"
+        android:scrollbars="vertical" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,10 +19,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.auth.User;
+import com.project.diary.model.Feelings;
+import com.project.diary.model.UniqueTags;
+import com.project.diary.profile.UserProfile;
 import com.project.diary.R;
 import com.project.diary.Splash;
 import com.project.diary.app_lock.ManageDiaryLock;
@@ -54,7 +62,7 @@ public class EntriesList extends AppCompatActivity {
     FirebaseUser user;
     FirebaseAuth auth;
 
-    List<String> entryTags;
+    List<String> entryTags, allUniqueTags;
 
 
     @Override
@@ -71,6 +79,30 @@ public class EntriesList extends AppCompatActivity {
         user = auth.getCurrentUser();
 
         Query query = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").orderBy("date", Query.Direction.DESCENDING);
+
+
+        //check if counter exists. create if not
+        DocumentReference counterReference = firestore.collection("allEntries").document(user.getUid()).collection("counters").document("feeling_counters");
+        counterReference.get().addOnCompleteListener(task -> {
+            if (!task.getResult().exists()){
+                Feelings feelings = new Feelings(0,0,0,0,0,0);
+                counterReference.set(feelings);
+            }
+        });
+
+        DocumentReference tagsReference = firestore.collection("allEntries").document(user.getUid()).collection("tags").document("unique_tags");
+        tagsReference.get().addOnCompleteListener(task -> {
+            if (!task.getResult().exists()){
+                UniqueTags uniqueTags = new UniqueTags();
+                tagsReference.set(uniqueTags);
+            }else{
+                UniqueTags uniqueTags = task.getResult().toObject(UniqueTags.class);
+                if (uniqueTags!=null){
+                    allUniqueTags = uniqueTags.getUnique_tags();
+                }
+            }
+        });
+
 
         // Query notes > uid > mynotes > allnotes
 
@@ -241,7 +273,9 @@ public class EntriesList extends AppCompatActivity {
 
         //show profile button
         binding.btnProfile.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), EntryImages.class));
+            Intent intent = new Intent(this, UserProfile.class);
+            intent.putStringArrayListExtra("unique_tags", (ArrayList<String>) allUniqueTags);
+            startActivity(intent);
             //verridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
 
            // Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();

@@ -32,6 +32,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -56,7 +57,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
 
     // Firebase
     FirebaseStorage storage;
-    StorageReference imgReference, storageReference;
+    StorageReference storageReference;
     String imgLink, imgName;
     Drawable oldImage;
 
@@ -64,13 +65,13 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     //for date time picker
     private int dYear, dMonth, dDay, tHour, tMinute;
     FirebaseFirestore firestore;
-    DocumentReference reference;
+    DocumentReference reference, counterReference;
     Intent data;
     FirebaseUser user;
     private ActivityEditEntryBinding binding;
 
     ImageButton choose_feeling, imgFavorite;
-    String userFeeling = "";
+    String userFeeling = "", newUserFeeling, oldUserFeeling;
     Boolean entryIsFavorite;
     String editTitle, editContent, editDate, editTime, editDateTime;
 
@@ -117,6 +118,8 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
         String date = data.getStringExtra("dateOnly");
         String time = data.getStringExtra("timeOnly");
         userFeeling = data.getStringExtra("feeling");
+        oldUserFeeling = data.getStringExtra("feeling");
+        newUserFeeling = data.getStringExtra("feeling");
         imgLink = data.getStringExtra("imgLink");
         imgName = data.getStringExtra("imgName");
         entryIsFavorite = data.getBooleanExtra("isFavorite", false);
@@ -159,7 +162,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             //save edited note
 
 
-            StorageReference storReference = storageReference.child("images/users/" + user.getUid() + "/" + UUID.randomUUID().toString());
+            counterReference = firestore.collection("allEntries").document(user.getUid()).collection("counters").document("feeling_counters");
 
             //
 
@@ -334,6 +337,7 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
     @Override
     public void applyFeeling(String uFeeling) {
         userFeeling = uFeeling;
+        newUserFeeling = uFeeling;
 
         checkUserFeeling();
 
@@ -487,5 +491,16 @@ public class EditEntry extends AppCompatActivity implements EmojiDialog.EmojiDia
             Toast.makeText(EditEntry.this, "Failed updating entries", Toast.LENGTH_SHORT).show();
             binding.progress.setVisibility(View.INVISIBLE);
         });
+
+        updateCounters();
     }
+
+    public void updateCounters(){
+        if (!oldUserFeeling.equals(newUserFeeling)){
+            counterReference.update(oldUserFeeling, FieldValue.increment(-1));
+            counterReference.update(newUserFeeling, FieldValue.increment(1));
+        }
+    }
+
+
 }

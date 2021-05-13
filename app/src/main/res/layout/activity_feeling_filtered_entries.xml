@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".entries.FeelingFilteredEntries">
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/transparrent"
+        android:tint="@color/black"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_emoji"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_back"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/entrieslist"
+        android:layout_marginTop="70dp"
+        android:scrollbars="vertical"
+        android:paddingBottom="100dp"
+        android:clipToPadding="false"
+        android:layoutAnimation="@anim/layout_anim_fall_down"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_rawRes="@raw/favorite_girl_social_media"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_marginBottom="70dp"
+        android:id="@+id/lottieNoEntryYet"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No entries with this feeling"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="#787878"
+        app:layout_constraintTop_toBottomOf="@id/lottieNoEntryYet"
+        android:gravity="center"
+        android:id="@+id/txtNoFavEntry"
+        android:textSize="19sp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

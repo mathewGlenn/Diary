@@ -38,6 +38,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -83,6 +84,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
     String[] mTags = {"Happy", "Travel", "Nature", "School"};
     Boolean addEntryAsFavorite = false;
 
+    DocumentReference counterReference, tagsReference;
     FirebaseFirestore firestore;
     FirebaseUser user;
     private ActivityAddEntryBinding binding;
@@ -146,6 +148,8 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
             binding.lottieLoading.setVisibility(View.VISIBLE);
 
             DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
+            counterReference = firestore.collection("allEntries").document(user.getUid()).collection("counters").document("feeling_counters");
+             tagsReference = firestore.collection("allEntries").document(user.getUid()).collection("tags").document("unique_tags");
 
 
             //////////////////////
@@ -184,6 +188,8 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                             Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_LONG).show();
                             binding.lottieLoading.setVisibility(View.INVISIBLE);
                         });
+                        incrementFeelingCounter();
+                        updateUniqueTags();
                     }else {
                         Toast.makeText(AddEntry.this, "An error has occured", Toast.LENGTH_SHORT).show();
                     }
@@ -200,6 +206,8 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                     Toast.makeText(getApplicationContext(), "Save failed", Toast.LENGTH_LONG).show();
                     binding.lottieLoading.setVisibility(View.INVISIBLE);
                 });
+                incrementFeelingCounter();
+                updateUniqueTags();
             }
 
             ///////////////////////////
@@ -468,5 +476,35 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
+    }
+
+    public void incrementFeelingCounter(){
+        switch (userFeeling) {
+            case "happy":
+                counterReference.update("happy", FieldValue.increment(1));
+                break;
+            case "crazy":
+                counterReference.update("crazy", FieldValue.increment(1));
+                break;
+            case "love":
+                counterReference.update("love", FieldValue.increment(1));
+                break;
+            case "sad":
+                counterReference.update("sad", FieldValue.increment(1));
+                break;
+            case "sick":
+                counterReference.update("sick", FieldValue.increment(1));
+                break;
+            case "angry":
+                counterReference.update("angry", FieldValue.increment(1));
+                break;
+        }
+    }
+
+    public void updateUniqueTags(){
+
+      for (int i = 0; i<arrListTags.size(); i++){
+          tagsReference.update("unique_tags", FieldValue.arrayUnion(arrListTags.get(i)));
+      }
     }
 }
