@@ -21,6 +21,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.protobuf.StringValue;
@@ -32,6 +34,8 @@ import com.project.diary.entries.TagFilteredEntry;
 import com.project.diary.entries.ViewImage;
 import com.project.diary.model.Feelings;
 import com.project.diary.model.Profile;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +59,13 @@ public class UserProfile extends AppCompatActivity {
         setContentView(view);
 
         data = getIntent();
+
+        int count_all_entries = data.getIntExtra("count_all_entries", 0);
+        binding.countAllEntries.setText(String.valueOf(count_all_entries));
+
         ArrayList<String> allUniqueTags = data.getStringArrayListExtra("unique_tags");
        if (allUniqueTags != null){
            setTag(allUniqueTags);
-           String unique_tag_count = String.valueOf(allUniqueTags.size());
-           binding.showNumTags.setText(unique_tag_count);
        }else
            binding.noTagsYet.setVisibility(View.VISIBLE);
 
@@ -69,8 +75,21 @@ public class UserProfile extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        reference = firestore.collection("allEntries").document(user.getUid()).collection("userProfile").document("profile");
 
+        Query favEntriesReference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").whereEqualTo("favorite", true);
+        favEntriesReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult() != null) {
+                        int count = task.getResult().size();
+                        binding.countFavEntries.setText(String.valueOf(count));
+                    }
+                }
+            }
+        });
+
+        reference = firestore.collection("allEntries").document(user.getUid()).collection("userProfile").document("profile");
 
         reference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
@@ -116,13 +135,18 @@ public class UserProfile extends AppCompatActivity {
                    sick = (int) p_sick;
                    angry = (int) p_angry;
 
+                   String dispHappy = happy+" %", dispCrazy = crazy+" %", dispLove = love+" %",
+                           dispSad = sad+" %", dispSick = sick+" %", dispAngry = angry+" %";
 
-                   binding.percentHappy.setText(happy + " %");
-                   binding.percentCrazy.setText(crazy + " %");
-                   binding.percentLove.setText(love + " %");
-                   binding.percentSad.setText(sad + " %");
-                   binding.percentSick.setText(sick + " %");
-                   binding.percentAngry.setText(angry + " %");
+
+                   binding.percentHappy.setText(dispHappy);
+                   binding.percentCrazy.setText(dispCrazy);
+                   binding.percentLove.setText(dispLove);
+                   binding.percentSad.setText(dispSad);
+                   binding.percentSick.setText(dispSick);
+                   binding.percentAngry.setText(dispAngry);
+
+                   binding.countUniqueTags.setText(total);
                }
 
 

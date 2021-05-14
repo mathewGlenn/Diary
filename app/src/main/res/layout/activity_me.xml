@@ -155,7 +155,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:onClick="showAllImages"
-                        android:text="25"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="@id/btn_show_images"
@@ -186,27 +185,11 @@
 
                         <ImageView
                             android:id="@+id/img1"
-                            android:layout_width="100dp"
+                            android:layout_width="match_parent"
                             android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/a1" />
-
-
-                        <ImageView
-                            android:id="@+id/img2"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_marginStart="5dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/a2" />
 
-                        <ImageView
-                            android:id="@+id/img3"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_marginStart="5dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/a3" />
                     </LinearLayout>
 
 
@@ -223,31 +206,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageButton
-                        android:id="@+id/btn_show_tags"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="@color/transparrent"
-                        android:onClick="showAllImages"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-                        android:tint="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/show_num_tags"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:onClick="showAllImages"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="@id/btn_show_tags"
-                        app:layout_constraintEnd_toStartOf="@id/btn_show_tags"
-                        app:layout_constraintTop_toTopOf="@id/btn_show_tags" />
 
                     <TextView
                         android:id="@+id/txt_tag_used"
@@ -255,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="Tags used"
+                        android:text="Unique tags"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -265,7 +223,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="30dp"
                         android:paddingBottom="20dp"
                         android:id="@+id/uniqueTagsChipGroup"
                         app:layout_constraintTop_toBottomOf="@id/txt_tag_used"/>
@@ -300,7 +258,7 @@
                         android:layout_margin="20dp"
                         android:textSize="13sp"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="Feelings analytics"
+                        android:text="Moods Percentage"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -310,7 +268,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingTop="10dp"
+                        android:paddingTop="25dp"
                         android:paddingBottom="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -478,11 +436,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_marginBottom="20dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp">
 
                     <TextView
                         android:id="@+id/in_numbers"
@@ -492,9 +453,82 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="In numbers"
                         android:textColor="@color/black"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="All entries"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="@id/in_numbers"
+                        app:layout_constraintTop_toBottomOf="@id/in_numbers"
+                        android:layout_marginTop="30dp"
+                        android:id="@+id/all_entries"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_marginEnd="100dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/all_entries"
+                        app:layout_constraintBottom_toBottomOf="@id/all_entries"
+                        android:id="@+id/count_all_entries"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Favorite entries"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="@id/all_entries"
+                        app:layout_constraintTop_toBottomOf="@id/all_entries"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/fav_entries"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_marginEnd="100dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/fav_entries"
+                        app:layout_constraintBottom_toBottomOf="@id/fav_entries"
+                        android:id="@+id/count_fav_entries"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Unique Tags"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="@id/fav_entries"
+                        app:layout_constraintTop_toBottomOf="@id/fav_entries"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/unique_tags" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_marginEnd="100dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/unique_tags"
+                        app:layout_constraintBottom_toBottomOf="@id/unique_tags"
+                        android:id="@+id/count_unique_tags"/>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

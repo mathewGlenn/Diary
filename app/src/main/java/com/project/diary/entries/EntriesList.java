@@ -65,6 +65,8 @@ public class EntriesList extends AppCompatActivity {
     List<String> entryTags, allUniqueTags;
 
 
+    int countAllEntries;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,20 +86,20 @@ public class EntriesList extends AppCompatActivity {
         //check if counter exists. create if not
         DocumentReference counterReference = firestore.collection("allEntries").document(user.getUid()).collection("counters").document("feeling_counters");
         counterReference.get().addOnCompleteListener(task -> {
-            if (!task.getResult().exists()){
-                Feelings feelings = new Feelings(0,0,0,0,0,0);
+            if (!task.getResult().exists()) {
+                Feelings feelings = new Feelings(0, 0, 0, 0, 0, 0);
                 counterReference.set(feelings);
             }
         });
 
         DocumentReference tagsReference = firestore.collection("allEntries").document(user.getUid()).collection("tags").document("unique_tags");
         tagsReference.get().addOnCompleteListener(task -> {
-            if (!task.getResult().exists()){
+            if (!task.getResult().exists()) {
                 UniqueTags uniqueTags = new UniqueTags();
                 tagsReference.set(uniqueTags);
-            }else{
+            } else {
                 UniqueTags uniqueTags = task.getResult().toObject(UniqueTags.class);
-                if (uniqueTags!=null){
+                if (uniqueTags != null) {
                     allUniqueTags = uniqueTags.getUnique_tags();
                 }
             }
@@ -191,6 +193,8 @@ public class EntriesList extends AppCompatActivity {
                     i1.putExtra("imgName", entry.getImage_name());
                     startActivity(i1);
                 });
+
+                countAllEntries = entryAdapter.getItemCount();
             }
 
             @NonNull
@@ -277,10 +281,11 @@ public class EntriesList extends AppCompatActivity {
         binding.btnProfile.setOnClickListener(v -> {
             Intent intent = new Intent(this, UserProfile.class);
             intent.putStringArrayListExtra("unique_tags", (ArrayList<String>) allUniqueTags);
+            intent.putExtra("count_all_entries", countAllEntries);
             startActivity(intent);
             //verridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
 
-           // Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
         });
 
         //display username and email on navigation header
