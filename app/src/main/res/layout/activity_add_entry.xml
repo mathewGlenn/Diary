@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".entries.AddEntry">
+    tools:context=".entries.AddEntry"
+    android:background="@color/background">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_loading"
@@ -29,13 +30,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:onClick="closeActivity"
             android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/transparrent"
             android:src="@drawable/ic_baseline_close_24"
-            android:tint="@color/black"
+            android:tint="@color/primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,6 +49,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/button_black_bg"
             android:text="SAVE"
+            android:textColor="@color/foreground"
             android:translationZ="2dp"
             app:elevation="15dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +60,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="25dp"
+            android:tint="@color/primary"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
             android:src="@drawable/tag_button"
@@ -71,6 +75,7 @@
             android:layout_marginEnd="20dp"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
+            android:tint="@color/primary"
             android:src="@drawable/img_button"
             app:layout_constraintBottom_toBottomOf="@id/btn_tags"
             app:layout_constraintEnd_toStartOf="@id/btn_tags"
@@ -83,6 +88,7 @@
             android:layout_marginEnd="18dp"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
+            android:tint="@color/primary"
             android:src="@drawable/voice_rec_button"
             app:layout_constraintBottom_toBottomOf="@id/btn_img"
             app:layout_constraintEnd_toStartOf="@id/btn_img"
@@ -118,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/foreground"
                 app:layout_constraintTop_toBottomOf="@id/img">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -125,11 +132,13 @@
                     android:layout_height="match_parent">
 
                     <TextView
+
                         android:id="@+id/txt_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/secondary"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="5:07 PM"
                         app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +149,7 @@
                         android:layout_width="1dp"
                         android:layout_height="15dp"
                         android:layout_marginStart="10dp"
-                        android:background="@color/black"
+                        android:background="@color/primary"
                         app:layout_constraintBottom_toBottomOf="@id/txt_time"
                         app:layout_constraintStart_toEndOf="@id/txt_time"
                         app:layout_constraintTop_toTopOf="@id/txt_time" />
@@ -150,6 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:textColor="@color/secondary"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Tue, 30 Mar, 2021"
                         app:layout_constraintBottom_toBottomOf="@id/lineSep"
@@ -184,16 +194,20 @@
                         style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColorHint="@color/secondary"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="16dp"
                         android:background="@color/transparrent"
                         android:fontFamily="@font/montserrat_semi_bold"
                         android:hint="Title"
+                        android:textColor="@color/primary"
                         android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/lineSep" />
 
                     <EditText
+                        android:textColorHint="@color/secondary"
+                        android:textColor="@color/primary"
                         android:id="@+id/entry_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -213,7 +227,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="100dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="@color/primary"
                         android:paddingBottom="25dp"
                         app:chipMinTouchTargetSize="0dp"
                         app:chipSpacingVertical="5dp"

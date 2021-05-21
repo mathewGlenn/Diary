@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserProfile extends AppCompatActivity {
     FirebaseStorage storage;
@@ -66,6 +67,8 @@ public class UserProfile extends AppCompatActivity {
         ArrayList<String> allUniqueTags = data.getStringArrayListExtra("unique_tags");
        if (allUniqueTags != null){
            setTag(allUniqueTags);
+           int count_unique_tags = allUniqueTags.size();
+           binding.countUniqueTags.setText(String.valueOf(count_unique_tags));
        }else
            binding.noTagsYet.setVisibility(View.VISIBLE);
 
@@ -77,14 +80,12 @@ public class UserProfile extends AppCompatActivity {
         storageReference = storage.getReference();
 
         Query favEntriesReference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").whereEqualTo("favorite", true);
-        favEntriesReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    if (task.getResult() != null) {
-                        int count = task.getResult().size();
-                        binding.countFavEntries.setText(String.valueOf(count));
-                    }
+        favEntriesReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                if (task.getResult() != null) {
+                    int count = task.getResult().size();
+                    binding.countFavEntries.setText(String.valueOf(count));
+
                 }
             }
         });
@@ -93,14 +94,16 @@ public class UserProfile extends AppCompatActivity {
 
         reference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
-                if (task.getResult().exists()){
+                if (Objects.requireNonNull(task.getResult()).exists()){
                     Profile profile = task.getResult().toObject(Profile.class);
-                    profile_name = profile.getProfile_name();
-                    fave_quote = profile.getFav_quote();
-                    profile_img_link = profile.getProfile_img_link();
-                    binding.profileName.setText( profile_name );
-                    binding.favQuote.setText("\" " +fave_quote + " \"");
-                    Glide.with(this).load(profile_img_link).into(binding.imgProfilePic);
+                    if (profile != null){
+                        profile_name = profile.getProfile_name();
+                        fave_quote = profile.getFav_quote();
+                        profile_img_link = profile.getProfile_img_link();
+                        binding.profileName.setText( profile_name );
+                        binding.favQuote.setText("\" " +fave_quote + " \"");
+                        Glide.with(this).load(profile_img_link).into(binding.imgProfilePic);
+                    }
                 }
             }else {
                 Log.w("get profile", "error", task.getException());
@@ -111,14 +114,16 @@ public class UserProfile extends AppCompatActivity {
 
         counterReference.get().addOnCompleteListener(task->{
            if (task.isSuccessful()){
-               if (task.getResult().exists()){
+               if (Objects.requireNonNull(task.getResult()).exists()){
                    Feelings feelings = task.getResult().toObject(Feelings.class);
-                   happy = feelings.getHappy();
-                   crazy = feelings.getCrazy();
-                   love = feelings.getLove();
-                   sad = feelings.getSad();
-                   sick = feelings.getSick();
-                   angry = feelings.getAngry();
+                      if (feelings != null){
+                          happy = feelings.getHappy();
+                          crazy = feelings.getCrazy();
+                          love = feelings.getLove();
+                          sad = feelings.getSad();
+                          sick = feelings.getSick();
+                          angry = feelings.getAngry();
+                      }
 
                    int total = happy + crazy + love + sad + sick + angry;
                    double p_happy = Math.round((100*happy) / (double)total);
@@ -146,7 +151,6 @@ public class UserProfile extends AppCompatActivity {
                    binding.percentSick.setText(dispSick);
                    binding.percentAngry.setText(dispAngry);
 
-                   binding.countUniqueTags.setText(total);
                }
 
 
@@ -211,8 +215,8 @@ public class UserProfile extends AppCompatActivity {
             );
             chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
             chip.setText(tagName);
-            chip.setChipBackgroundColorResource(R.color.black);
-            chip.setTextColor(getResources().getColor(R.color.white));
+            chip.setChipBackgroundColorResource(R.color.chip);
+            chip.setTextColor(getResources().getColor(R.color.primary));
             chip.setEnsureMinTouchTargetSize(false);
 
             chip.setOnClickListener(v -> {

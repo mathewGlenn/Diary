@@ -6,6 +6,7 @@
     android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".entries.EntryContent">
 
     <View
@@ -32,7 +33,7 @@
                 android:layout_margin="10dp"
                 android:background="@color/transparrent"
                 android:src="@drawable/ic_baseline_arrow_back_24"
-                android:tint="@color/black"
+                android:tint="@color/primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +45,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@color/transparrent"
                 android:src="@drawable/ic_baseline_edit_24"
-                android:tint="@color/black"
+                android:tint="@color/primary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +56,7 @@
                 android:layout_marginEnd="20dp"
                 android:background="@color/transparrent"
                 android:src="@drawable/ic_baseline_delete_24"
-                android:tint="@color/black"
+                android:tint="@color/primary"
                 app:layout_constraintBottom_toBottomOf="@id/btn_edit"
                 app:layout_constraintEnd_toStartOf="@id/btn_edit"
                 app:layout_constraintTop_toTopOf="@id/btn_edit" />
@@ -116,7 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    app:cardBackgroundColor="@color/foreground">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -130,7 +132,7 @@
                             android:layout_marginTop="5dp"
                             android:fontFamily="@font/montserrat_medium"
                             android:text="5:07 PM"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -139,7 +141,7 @@
                             android:layout_width="1dp"
                             android:layout_height="15dp"
                             android:layout_marginStart="10dp"
-                            android:background="@color/black"
+                            android:background="@color/primary"
                             app:layout_constraintBottom_toBottomOf="@id/txt_time"
                             app:layout_constraintStart_toEndOf="@id/txt_time"
                             app:layout_constraintTop_toTopOf="@id/txt_time" />
@@ -151,7 +153,7 @@
                             android:layout_marginStart="10dp"
                             android:fontFamily="@font/montserrat_medium"
                             android:text="Tue, 30 Mar, 2021"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary"
                             app:layout_constraintBottom_toBottomOf="@id/lineSep"
                             app:layout_constraintStart_toEndOf="@id/lineSep"
                             app:layout_constraintTop_toTopOf="@id/lineSep" />
@@ -185,7 +187,7 @@
                             android:layout_marginTop="15dp"
                             android:fontFamily="@font/montserrat_semi_bold"
                             android:text="Title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary"
                             android:textSize="17sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/lineSep" />
@@ -199,7 +201,7 @@
                             android:fontFamily="@font/montserrat_medium"
                             android:lineSpacingExtra="10dp"
                             android:text="Content"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary"
                             android:textSize="15sp"
                             app:layout_constraintTop_toBottomOf="@id/entry_title" />
 

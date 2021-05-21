@@ -24,7 +24,7 @@ public class EmojiDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         //inflate layout

@@ -4,6 +4,8 @@
         <menu>
             <item
                 android:id="@+id/diary_lock"
+
+
                 android:icon="@drawable/ic_baseline_lock_24"
                 android:title="Diary Lock" />
             <item

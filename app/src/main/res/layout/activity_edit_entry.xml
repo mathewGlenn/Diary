@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".entries.EditEntry">
+    tools:context=".entries.EditEntry"
+    android:background="@color/background">
 
     <View
         android:layout_width="match_parent"
@@ -40,6 +41,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/button_black_bg"
             android:text="UPDATE"
+            android:textColor="@color/foreground"
             android:translationZ="2dp"
             app:elevation="15dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,6 +54,7 @@
             android:layout_marginEnd="25dp"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
+            android:tint="@color/primary"
             android:src="@drawable/tag_button"
             app:layout_constraintBottom_toBottomOf="@id/btn_update"
             app:layout_constraintEnd_toStartOf="@id/btn_update"
@@ -64,6 +67,7 @@
             android:layout_marginEnd="20dp"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
+            android:tint="@color/primary"
             android:src="@drawable/img_button"
             app:layout_constraintBottom_toBottomOf="@id/btn_tags"
             app:layout_constraintEnd_toStartOf="@id/btn_tags"
@@ -74,6 +78,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="18dp"
+            android:tint="@color/primary"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
             android:src="@drawable/voice_rec_button"
@@ -111,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/foreground"
                 app:layout_constraintTop_toBottomOf="@id/img">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -125,7 +131,7 @@
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="5:07 PM"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -134,7 +140,7 @@
                         android:layout_width="1dp"
                         android:layout_height="15dp"
                         android:layout_marginStart="10dp"
-                        android:background="@color/black"
+                        android:background="@color/primary"
                         app:layout_constraintBottom_toBottomOf="@id/txt_time"
                         app:layout_constraintStart_toEndOf="@id/txt_time"
                         app:layout_constraintTop_toTopOf="@id/txt_time" />
@@ -146,7 +152,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Tue, 30 Mar, 2021"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         app:layout_constraintBottom_toBottomOf="@id/lineSep"
                         app:layout_constraintStart_toEndOf="@id/lineSep"
                         app:layout_constraintTop_toTopOf="@id/lineSep" />
@@ -185,7 +191,8 @@
                         android:background="@color/transparrent"
                         android:fontFamily="@font/montserrat_semi_bold"
                         android:hint="Title"
-                        android:textColor="@color/black"
+                        android:textColorHint="@color/secondary"
+                        android:textColor="@color/primary"
                         android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/lineSep" />
@@ -196,11 +203,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="15dp"
+                        android:textColorHint="@color/secondary"
                         android:background="@color/transparrent"
                         android:fontFamily="@font/montserrat_medium"
                         android:hint="Write your story here..."
                         android:lineSpacingExtra="10dp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         app:layout_constraintTop_toBottomOf="@id/entry_title" />
 
@@ -210,7 +218,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="100dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="@color/primary"
                         android:paddingBottom="25dp"
                         app:chipMinTouchTargetSize="0dp"
                         app:chipSpacingVertical="2dp"

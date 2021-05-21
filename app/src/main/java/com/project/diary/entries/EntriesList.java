@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.auth.User;
+import com.project.diary.ToggleDarkMode;
 import com.project.diary.model.Feelings;
 import com.project.diary.model.UniqueTags;
 import com.project.diary.profile.UserProfile;
@@ -90,6 +91,7 @@ public class EntriesList extends AppCompatActivity {
                 Feelings feelings = new Feelings(0, 0, 0, 0, 0, 0);
                 counterReference.set(feelings);
             }
+
         });
 
         DocumentReference tagsReference = firestore.collection("allEntries").document(user.getUid()).collection("tags").document("unique_tags");
@@ -147,6 +149,10 @@ public class EntriesList extends AppCompatActivity {
 
                 noteViewHolder.entryTitle.setText(entry.getTitle());
                 noteViewHolder.entryContent.setText(entry.getContent());
+
+/*                if (entry.getImage_link() == null){
+                    noteViewHolder.entryHasImageIndicator.setVisibility(View.INVISIBLE);
+                }*/
 
                 //setting feeling emoji
                 switch (userFeeling) {
@@ -265,6 +271,8 @@ public class EntriesList extends AppCompatActivity {
                 checkUser();
             } else if (item.getItemId() == R.id.diary_lock) {
                 startActivity(new Intent(getApplicationContext(), ManageDiaryLock.class));
+            }else if (item.getItemId() == R.id.darkmode) {
+                startActivity(new Intent(getApplicationContext(), ToggleDarkMode.class));
             }
 
             return true;
@@ -288,7 +296,7 @@ public class EntriesList extends AppCompatActivity {
             // Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
         });
 
-        //display username and email on navigation header
+/*        //display username and email on navigation header
         View headerView = binding.navView.getHeaderView(0);
         TextView userName = headerView.findViewById(R.id.userDisplayName);
         TextView userEmail = headerView.findViewById(R.id.userDisplayEmail);
@@ -303,7 +311,7 @@ public class EntriesList extends AppCompatActivity {
         }
 
         userName.setText(udName);
-        userEmail.setText(udEmail);
+        userEmail.setText(udEmail);*/
 
         //display user name on top of the app
         //User's Diary
@@ -344,12 +352,13 @@ public class EntriesList extends AppCompatActivity {
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         TextView entryTitle, entryContent, entryDate, entryDay, entryMonth;
-        ImageView entryFeeling;
+        ImageView entryFeeling, entryHasImageIndicator;
         View view;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            entryHasImageIndicator = itemView.findViewById(R.id.entryImgIndicator);
             entryTitle = itemView.findViewById(R.id.title);
             entryContent = itemView.findViewById(R.id.content);
             entryDate = itemView.findViewById(R.id.date);

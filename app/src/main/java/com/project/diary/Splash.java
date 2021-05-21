@@ -1,12 +1,14 @@
 package com.project.diary;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,11 +21,23 @@ import com.project.diary.entries.EntriesList;
 public class Splash extends AppCompatActivity {
     FirebaseAuth auth;
 
+    static SharedPreferences sharedPreferences;
+    static boolean isDarkModeOn;
+
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
+
+        if (isDarkModeOn){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         auth = FirebaseAuth.getInstance();
 
         Handler handler = new Handler();
@@ -31,11 +45,11 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 //Check if the user is logged in
-                if (auth.getCurrentUser() != null){
+                if (auth.getCurrentUser() != null) {
                     startActivity(new Intent(getApplicationContext(), LockScreen.class));
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
-                }else {
+                } else {
                     //create anonymous account
                     auth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override

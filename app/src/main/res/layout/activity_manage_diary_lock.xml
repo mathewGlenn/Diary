@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app_lock.ManageDiaryLock">
+    tools:context=".app_lock.ManageDiaryLock"
+    android:background="@color/background">
 
     <ImageButton
         android:id="@+id/btn_back"
@@ -16,7 +17,7 @@
         android:onClick="closeSetDiaryLock"
         android:scaleType="fitXY"
         android:src="@drawable/ic_baseline_arrow_back_24"
-        android:tint="@color/black"
+        android:tint="@color/primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
         android:text="Set Diary Lock"
-        android:textColor="@color/black"
+        android:textColor="@color/primary"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +71,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Enable Diary Lock"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -78,7 +79,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Set PIN code to protect your diary"
-                        android:textColor="@color/dark_gray"
+                        android:textColor="@color/secondary"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -126,7 +127,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Set PIN"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -134,7 +135,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Set or change your PIN"
-                        android:textColor="@color/dark_gray"
+                        android:textColor="@color/secondary"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -171,7 +172,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Set Security Question"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -179,7 +180,8 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="In case you forget your PIN"
-                        android:textColor="@color/dark_gray"
+                        android:textColor="@color/secondary"
+
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -197,48 +199,6 @@
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/transparrent"
             app:cardElevation="0dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="Enable Biometric"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="Unlock using your fingerprint"
-                        android:textColor="@color/dark_gray"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switchEnableFIngerPrint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </androidx.cardview.widget.CardView>
 

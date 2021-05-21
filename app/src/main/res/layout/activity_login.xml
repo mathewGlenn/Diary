@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".authentication.Login">
+    tools:context=".authentication.Login"
+    android:background="@color/background">
 
     <ImageButton
         android:id="@+id/btnClose"
@@ -15,7 +16,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/transparrent"
         android:src="@drawable/ic_baseline_close_24"
-        android:tint="@color/black"
+        android:tint="@color/primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,20 +35,23 @@
             android:fontFamily="@font/montserrat_semi_bold"
             android:text="Login"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="22sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
+            app:boxStrokeColor="@color/login_selector"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/secondary"
             android:layout_marginHorizontal="25dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/primary"
                 android:fontFamily="@font/montserrat_medium"
                 android:hint="Email Address"
                 android:inputType="text"
@@ -61,6 +65,9 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="25dp"
+            android:textColorHint="@color/secondary"
+            app:passwordToggleTint="@color/secondary"
+            app:boxStrokeColor="@color/login_selector"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -69,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_medium"
                 android:hint="Password"
+                android:textColor="@color/primary"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:textSize="16sp" />
@@ -82,7 +90,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/button_semiround_black_bg"
             android:text="Login"
-            android:textColor="@color/white" />
+            android:textColor="@color/foreground" />
 
         <TextView
             android:id="@+id/btnForgotPass"
@@ -93,7 +101,7 @@
             android:text="Forgot Password?"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="12sp" />
 
         <TextView
@@ -105,7 +113,7 @@
             android:text="Create New Account"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="12sp" />
 
 

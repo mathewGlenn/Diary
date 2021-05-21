@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".notification.ManageNotification"
+    tools:context=".ToggleDarkMode"
     android:background="@color/background">
     <ImageButton
         android:id="@+id/btn_back"
@@ -21,11 +21,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txt_diaryLock"
+        android:id="@+id/toggledarkmode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:text="Manage Notifications"
+        android:text="Toggle Dark Mode"
         android:textColor="@color/primary"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
@@ -33,15 +33,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/btn_back" />
 
-    <LinearLayout
-        android:id="@+id/linearlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/txt_diaryLock">
+
+
 
     <androidx.cardview.widget.CardView
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_back"
         android:id="@+id/cardEnableLock"
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -49,7 +48,8 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/transparrent"
-        app:cardElevation="0dp">
+        app:cardElevation="0dp"
+        android:onClick="changeTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -65,11 +65,12 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:id="@+id/darkmode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/montserrat_medium"
-                    android:text="Disable Reminders"
+                    android:text="Dark mode is enabled"
                     android:textColor="@color/primary" />
 
                 <TextView
@@ -77,68 +78,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/montserrat_medium"
-                    android:text="If off, you won't be reminded to create entries"
+                    android:text="Switch to a dark theme"
                     android:textColor="@color/secondary"
                     android:textSize="12sp" />
 
             </LinearLayout>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchEnableDiaryLock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
+            <Button
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_goneMarginEnd="7dp"
+                android:id="@+id/switchNightMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="25dp"
+                android:background="@color/transparrent"
+                android:drawableStart="@drawable/ic_darkmode"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/primary"
+                android:gravity="center_vertical"
+                android:text="Dark Mode"
+                android:textAllCaps="false"
+                android:textColor="@color/primary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardSetPin"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/transparrent"
-
-            app:cardElevation="0dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="Change Notification Time"
-                    android:textColor="@color/primary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="Choose what time you want to receive a reminder."
-                    android:textColor="@color/secondary"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.EditProfile">
+    tools:context=".profile.EditProfile"
+    android:background="@color/background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/action_bar"
@@ -22,7 +23,7 @@
             android:background="@color/transparrent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_arrow_back_24"
-            android:tint="@color/black"
+            android:tint="@color/primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +35,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_bold"
             android:text="Profile Setting"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/btn_back"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +51,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/montserrat_medium"
         android:text="Profile Photo"
-        android:textColor="@color/black"
+        android:textColor="@color/primary"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/action_bar" />
@@ -75,7 +76,7 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/montserrat_medium"
         android:text="Profile Name"
-        android:textColor="@color/black"
+        android:textColor="@color/primary"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgProfilePic" />
@@ -85,7 +86,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/profile_name"
         android:layout_marginHorizontal="20dp"
-        android:id="@+id/edit_name"/>
+        android:id="@+id/edit_name"
+        android:textColor="@color/primary"
+        android:backgroundTint="@color/secondary"/>
 
     <TextView
         android:id="@+id/fav_quote"
@@ -95,18 +98,20 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/montserrat_medium"
         android:text="Favorite Quote"
-        android:textColor="@color/black"
+        android:textColor="@color/primary"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_name" />
 
     <EditText
+        android:backgroundTint="@color/secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="10dp"
         app:layout_constraintTop_toBottomOf="@id/fav_quote"
         android:layout_marginHorizontal="20dp"
-        android:id="@+id/edit_quote"/>
+        android:id="@+id/edit_quote"
+        android:textColor="@color/primary"/>
 
     <Button
         android:layout_width="match_parent"
@@ -116,6 +121,6 @@
         app:layout_constraintTop_toBottomOf="@id/edit_quote"
         android:background="@drawable/button_semiround_black_bg"
         android:layout_marginHorizontal="20dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground"
         android:layout_marginTop="20dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

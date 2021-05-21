@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.UserProfile">
+    tools:context=".profile.UserProfile"
+    android:background="@color/background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/action_bar"
@@ -22,7 +23,7 @@
             android:background="@color/transparrent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_arrow_back_24"
-            android:tint="@color/black"
+            android:tint="@color/primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +35,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_bold"
             android:text="My Profile"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/btn_back"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,6 +56,7 @@
 
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/foreground"
                 android:id="@+id/card_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +76,7 @@
                         android:onClick="editProfile"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_baseline_edit_24"
-                        android:tint="@color/black"
+                        android:tint="@color/primary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,6 +87,7 @@
                         android:background="@drawable/profile_border"
                         android:scaleType="centerCrop"
                         android:src="@drawable/person"
+
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,7 +98,7 @@
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_semi_bold"
                         android:text="Glenn Mathew Garma"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="14sp"
                         app:layout_constraintStart_toEndOf="@id/imgProfilePic"
                         app:layout_constraintTop_toTopOf="@id/imgProfilePic" />
@@ -105,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="mathew.garma@gmail.com"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="11sp"
                         app:layout_constraintStart_toStartOf="@id/profile_name"
                         app:layout_constraintTop_toBottomOf="@+id/profile_name" />
@@ -118,7 +121,7 @@
                         android:fontFamily="@font/baby_girl"
                         android:gravity="center"
                         android:text="&quot;Keep a Diary and someday it will keep you.&quot;"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         app:layout_constraintTop_toBottomOf="@id/imgProfilePic" />
 
@@ -130,7 +133,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/foreground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -145,7 +149,7 @@
                         android:onClick="showAllImages"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-                        android:tint="@color/black"
+                        android:tint="@color/primary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -155,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:onClick="showAllImages"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="@id/btn_show_images"
                         app:layout_constraintEnd_toStartOf="@id/btn_show_images"
@@ -168,7 +172,7 @@
                         android:layout_marginEnd="10dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Photos"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -200,7 +204,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="20dp">
+                android:layout_marginVertical="20dp"
+                app:cardBackgroundColor="@color/foreground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -214,7 +219,7 @@
                         android:layout_margin="20dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Unique tags"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -223,6 +228,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
+                        app:chipSpacingVertical="5dp"
                         android:layout_marginTop="30dp"
                         android:paddingBottom="20dp"
                         android:id="@+id/uniqueTagsChipGroup"
@@ -245,7 +251,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp">
+                android:layout_marginHorizontal="15dp"
+                app:cardBackgroundColor="@color/background">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -259,7 +266,7 @@
                         android:textSize="13sp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Moods Percentage"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -296,6 +303,7 @@
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/montserrat_semi_bold"
                                 android:text="%"
+                                android:textColor="@color/primary"
                                 android:textSize="12sp"/>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -316,6 +324,7 @@
                                 android:src="@drawable/ic_crazy_svg" />
 
                             <TextView
+                                android:textColor="@color/primary"
                                 android:id="@+id/percent_crazy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -342,6 +351,7 @@
                                 android:src="@drawable/ic_hert_eyes_svg" />
 
                             <TextView
+                                android:textColor="@color/primary"
                                 android:id="@+id/percent_love"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -368,6 +378,7 @@
                                 android:src="@drawable/ic_sad_svg" />
 
                             <TextView
+                                android:textColor="@color/primary"
                                 android:id="@+id/percent_sad"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -394,6 +405,7 @@
                                 android:src="@drawable/ic_sick_svg" />
 
                             <TextView
+                                android:textColor="@color/primary"
                                 android:id="@+id/percent_sick"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -419,6 +431,7 @@
                                 android:src="@drawable/ic_angry_svg" />
 
                             <TextView
+                                android:textColor="@color/primary"
                                 android:id="@+id/percent_angry"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -433,6 +446,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
@@ -452,7 +466,7 @@
                         android:layout_margin="20dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="In numbers"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -462,7 +476,7 @@
                         android:layout_height="wrap_content"
                         android:text="All entries"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@id/in_numbers"
                         app:layout_constraintTop_toBottomOf="@id/in_numbers"
@@ -473,7 +487,7 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         android:layout_marginEnd="100dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -486,7 +500,7 @@
                         android:layout_height="wrap_content"
                         android:text="Favorite entries"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@id/all_entries"
                         app:layout_constraintTop_toBottomOf="@id/all_entries"
@@ -497,7 +511,7 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         android:layout_marginEnd="100dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -511,7 +525,7 @@
                         android:layout_height="wrap_content"
                         android:text="Unique Tags"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@id/fav_entries"
                         app:layout_constraintTop_toBottomOf="@id/fav_entries"
@@ -522,7 +536,7 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary"
                         android:textSize="15sp"
                         android:layout_marginEnd="100dp"
                         app:layout_constraintEnd_toEndOf="parent"

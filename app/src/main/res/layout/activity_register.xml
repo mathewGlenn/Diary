@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".authentication.Register">
+    tools:context=".authentication.Register"
+    android:background="@color/background">
     <ImageButton
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
@@ -13,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/transparrent"
         android:src="@drawable/ic_baseline_close_24"
-        android:tint="@color/black"
+        android:tint="@color/primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,13 +32,15 @@
             android:fontFamily="@font/montserrat_semi_bold"
             android:text="Sync Account"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="22sp"
             android:layout_marginBottom="55dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_marginHorizontal="25dp"
             android:id="@+id/userLayout"
+            app:boxStrokeColor="@color/login_selector"
+            android:textColorHint="@color/secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -48,12 +51,15 @@
                 android:layout_height="wrap_content"
                 android:hint="Username"
                 android:textSize="16sp"
+                android:textColor="@color/primary"
                 android:inputType="text"
                 android:maxLines="1"
                 android:fontFamily="@font/montserrat_medium"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            app:boxStrokeColor="@color/login_selector"
+            android:textColorHint="@color/secondary"
             android:layout_marginHorizontal="25dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/emailLayout"
@@ -66,24 +72,29 @@
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
                 android:textSize="16sp"
+                android:textColor="@color/primary"
                 android:inputType="text"
                 android:maxLines="1"
                 android:fontFamily="@font/montserrat_medium"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            app:boxStrokeColor="@color/login_selector"
+            android:textColorHint="@color/secondary"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/passLayout"
             android:layout_width="match_parent"
             android:layout_marginHorizontal="25dp"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/secondary">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
+                android:textColor="@color/primary"
                 android:textSize="16sp"
                 android:fontFamily="@font/montserrat_medium"
                 android:inputType="textPassword"
@@ -91,12 +102,15 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            app:boxStrokeColor="@color/login_selector"
+            android:textColorHint="@color/secondary"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/confirmPassLayout"
             android:layout_marginHorizontal="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/secondary">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editConfirmPassword"
@@ -104,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
                 android:textSize="16sp"
+                android:textColor="@color/primary"
                 android:fontFamily="@font/montserrat_medium"
                 android:inputType="textPassword"
                 android:maxLines="1" />
@@ -116,7 +131,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:text="Sync"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground"
             android:id="@+id/btnSync"/>
 
         <TextView
@@ -125,7 +140,7 @@
             android:text="Login Here"
             android:fontFamily="@font/montserrat_medium"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
             android:textSize="12sp"
             android:textAlignment="center"
             android:id="@+id/btnForgotPass"

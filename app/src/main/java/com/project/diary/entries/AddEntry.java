@@ -7,7 +7,6 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,20 +18,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +33,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.project.diary.EmojiDialog;
@@ -50,12 +41,10 @@ import com.project.diary.databinding.ActivityAddEntryBinding;
 import com.project.diary.model.Entry;
 
 import java.io.IOException;
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -386,7 +375,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
     protected void showAddTagDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View view = layoutInflater.inflate(R.layout.add_tag_layout, null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
         builder.setView(view);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -411,6 +400,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+        //alertDialog.getWindow().getDecorView().getBackground().setColorFilter(new LightingColorFilter(0xFF000000, getResources().getColor(R.color.foreground)));
     }
 
 
@@ -513,5 +503,9 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
       for (int i = 0; i<arrListTags.size(); i++){
           tagsReference.update("unique_tags", FieldValue.arrayUnion(arrListTags.get(i)));
       }
+    }
+
+    public void closeActivity(View view) {
+        finish();
     }
 }
