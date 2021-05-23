@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app_lock.ManageDiaryLock"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".app_lock.ManageDiaryLock">
 
     <ImageButton
         android:id="@+id/btn_back"
@@ -85,10 +85,13 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
+                    style="@style/TextAppearance.AppCompat.Widget.Switch"
                     android:id="@+id/switchEnableDiaryLock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
+                    app:thumbTint="@color/primary"
+                    app:trackTint="@color/secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -105,8 +108,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
+            android:onClick="changePin"
             app:cardBackgroundColor="@color/transparrent"
-
             app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="Set PIN"
+                        android:text="Change PIN"
                         android:textColor="@color/primary" />
 
                     <TextView
@@ -134,7 +137,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="Set or change your PIN"
+                        android:text="Change your PIN"
                         android:textColor="@color/secondary"
                         android:textSize="12sp" />
 

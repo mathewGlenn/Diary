@@ -47,8 +47,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import p32929.easypasscodelock.Utils.EasyLock;
+import p32929.easypasscodelock.Utils.LockscreenHandler;
 
-public class EntriesList extends AppCompatActivity {
+
+public class EntriesList extends LockscreenHandler {
 
     //for the nav_view
     private DrawerLayout drawerLayout;
@@ -74,6 +77,9 @@ public class EntriesList extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        EasyLock.setBackgroundColor(R.color.background);
+        EasyLock.checkPassword(this);
 
 
         firestore = FirebaseFirestore.getInstance();

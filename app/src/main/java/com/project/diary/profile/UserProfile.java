@@ -216,7 +216,7 @@ public class UserProfile extends AppCompatActivity {
             chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
             chip.setText(tagName);
             chip.setChipBackgroundColorResource(R.color.chip);
-            chip.setTextColor(getResources().getColor(R.color.primary));
+            chip.setTextColor(getResources().getColor(R.color.foreground));
             chip.setEnsureMinTouchTargetSize(false);
 
             chip.setOnClickListener(v -> {

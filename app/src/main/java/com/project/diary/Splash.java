@@ -32,10 +32,10 @@ public class Splash extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
         isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
 
-        if (isDarkModeOn){
+        if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-        }else {
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         auth = FirebaseAuth.getInstance();
@@ -46,7 +46,7 @@ public class Splash extends AppCompatActivity {
             public void run() {
 //Check if the user is logged in
                 if (auth.getCurrentUser() != null) {
-                    startActivity(new Intent(getApplicationContext(), LockScreen.class));
+                    startActivity(new Intent(getApplicationContext(), EntriesList.class));
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
                 } else {

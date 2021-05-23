@@ -16,7 +16,8 @@ public class ToggleDarkMode extends AppCompatActivity {
     static SharedPreferences sharedPreferences;
     static boolean isDarkModeOn;
     static SharedPreferences.Editor editor;
-ActivityToggleDarkModeBinding binding;
+    ActivityToggleDarkModeBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,10 +29,10 @@ ActivityToggleDarkModeBinding binding;
         editor = sharedPreferences.edit();
         isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
 
-        if (isDarkModeOn){
+        if (isDarkModeOn) {
             binding.darkmode.setText("Dark Mode is enabled");
 
-        }else {
+        } else {
             binding.darkmode.setText("Dark Mode is disabled");
         }
 
@@ -42,13 +43,13 @@ ActivityToggleDarkModeBinding binding;
     }
 
     public void changeTheme(View view) {
-        if (isDarkModeOn){
+        if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             binding.darkmode.setText("Dark Mode is enabled");
 
             editor.putBoolean("isDarkModeOn", false);
             editor.apply();
-        }else{
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             binding.darkmode.setText("Dark Mode is disabled");
 

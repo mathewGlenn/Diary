@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ToggleDarkMode"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".ToggleDarkMode">
+
     <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
@@ -34,22 +35,20 @@
         app:layout_constraintTop_toTopOf="@id/btn_back" />
 
 
-
-
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_back"
         android:id="@+id/cardEnableLock"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginTop="25dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="changeTheme"
         app:cardBackgroundColor="@color/transparrent"
         app:cardElevation="0dp"
-        android:onClick="changeTheme">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_back">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -85,10 +84,6 @@
             </LinearLayout>
 
             <Button
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_goneMarginEnd="7dp"
                 android:id="@+id/switchNightMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,9 +95,12 @@
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/primary"
                 android:gravity="center_vertical"
-                android:text="Dark Mode"
+                android:onClick="changeTheme"
                 android:textAllCaps="false"
-                android:textColor="@color/primary" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginEnd="7dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

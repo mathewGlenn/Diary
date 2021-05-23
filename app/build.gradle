@@ -75,6 +75,10 @@ dependencies {
     //facebook login
   //  implementation 'com.facebook.android:facebook-login:[8.1)'
 
+    //try
+    implementation 'com.github.thealeksandr:PFLockScreen-Android:1.0.0-beta7'
+
+
 }
 
 apply plugin: 'com.android.application'
