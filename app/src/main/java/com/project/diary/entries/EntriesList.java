@@ -17,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.login.LoginManager;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -323,17 +324,19 @@ public class EntriesList extends LockscreenHandler {
         //User's Diary
         String diaryOwner = user.getDisplayName();
 
-        if (!diaryOwner.isEmpty()) {
-            //get the first word only in user name
-            diaryOwner = getFirstWord(diaryOwner);
-            String uname_diary = diaryOwner.concat("'s Diary");
-            binding.unameDiary.setText(uname_diary);
-        }
+        if (diaryOwner != null) {
+            if (!diaryOwner.isEmpty()) {
+                //get the first word only in user name
+                diaryOwner = getFirstWord(diaryOwner);
+                String uname_diary = diaryOwner.concat("'s Diary");
+                binding.unameDiary.setText(uname_diary);
+            }
 
-        binding.refreshLayout.setOnRefreshListener(() -> {
-            entryAdapter.notifyDataSetChanged();
-            binding.refreshLayout.setRefreshing(false);
-        });
+            binding.refreshLayout.setOnRefreshListener(() -> {
+                entryAdapter.notifyDataSetChanged();
+                binding.refreshLayout.setRefreshing(false);
+            });
+        }
 
 
         // End of onCreate
@@ -397,8 +400,7 @@ public class EntriesList extends LockscreenHandler {
         if (user.isAnonymous()) {
             displayLogoutAlert();
         } else {
-
-
+            LoginManager.getInstance().logOut();
             auth.signOut();
             finish();
             startActivity(new Intent(getApplicationContext(), Splash.class));

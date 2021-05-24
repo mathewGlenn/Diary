@@ -1,32 +1,47 @@
 package com.project.diary;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.project.diary.databinding.ActivityMain2Binding;
 import com.project.diary.entries.EntriesList;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-public class MainActivity2 extends AppCompatActivity  implements EmojiDialog.EmojiDialogListener{
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class MainActivity2 extends AppCompatActivity {
+
+    private static final String TAG = "FacebookLogin";
+    private static final int RC_SIGN_IN = 12345;
+
+    private CallbackManager manager;
+    private FirebaseAuth auth;
 
     private ActivityMain2Binding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,91 +50,90 @@ public class MainActivity2 extends AppCompatActivity  implements EmojiDialog.Emo
         View v = binding.getRoot();
         setContentView(v);
 
-        SimpleDateFormat dateTimeFormat;
 
-        Calendar calendar;
+        auth = FirebaseAuth.getInstance();
 
-        calendar = Calendar.getInstance();
+        manager = CallbackManager.Factory.create();
+        LoginButton loginButton = binding.loginButton;
 
-        dateTimeFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a", java.util.Locale.getDefault());
+        loginButton.setPermissions("email", "public_profile");
+        loginButton.registerCallback(manager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
 
-        String date = dateTimeFormat.format(calendar.getTime());
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError:" + error);
+                Toast.makeText(MainActivity2.this, "error", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
+    }
 
-        try {
-            Date d_date = dateTimeFormat.parse(date);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = auth.getCurrentUser();
 
-            DateFormat dateOnly = new SimpleDateFormat("dd",java.util.Locale.getDefault());
-            DateFormat dayOnly = new SimpleDateFormat("EEE", java.util.Locale.getDefault());
-            DateFormat monthOnly = new SimpleDateFormat("MMM", java.util.Locale.getDefault());
-
-            DateFormat time  = new SimpleDateFormat("hh: mm a", java.util.Locale.getDefault());
-
-            binding.date.setText(dateOnly.format(d_date));
-            binding.day.setText(dayOnly.format(d_date));
-            binding.month.setText(monthOnly.format(d_date));
-
-            binding.time.setText(time.format(d_date));
-
-
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (currentUser != null) {
+            Log.d(TAG, "Currently Signed in:" + currentUser.getEmail());
+            //Toast.makeText(this, "currently logged in", Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(new Intent(this, EntriesList.class));
         }
-
-
-        List<String> tagList = new ArrayList<>();
-        tagList.add("Good");
-        tagList.add("Funny");
-        tagList.add("Sex");
-        setTag(tagList);
-
     }
 
-
-    public void onChooseFeeling(View view) {
-        EmojiDialog emojiDialog = new EmojiDialog();
-        emojiDialog.show(getSupportFragmentManager(), "emoji dialog");
-    }
 
 
     @Override
-    public void applyFeeling(String uFeeling) {
-        binding.feeling.setText(uFeeling);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        manager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void gotoMainAc(View view) {
-        startActivity(new Intent(this, EntriesList.class));
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        auth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                //sign in success, ui will update with the signed in user's information
+                Log.d(TAG, "signInWithCredential:success");
+                FirebaseUser user = auth.getCurrentUser();
+                Toast.makeText(MainActivity2.this, "Authentication Succeeded", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, EntriesList.class));
+                finish();
+            } else {
+                //if signin fails a message will display to the user
+                Log.d(TAG, "signInCredential:failure", task.getException());
+                Toast.makeText(MainActivity2.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-
-
-    private void setTag(final List<String> tagList) {
-        final ChipGroup chipGroup = findViewById(R.id.chipGroup);
-        for (int index = 0; index < tagList.size(); index++) {
-            final String tagName = tagList.get(index);
-            final Chip chip = new Chip(this);
-            int paddingDp = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 10,
-                    getResources().getDisplayMetrics()
-            );
-            chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
-            chip.setText(tagName);
-            chip.setTextColor(getResources().getColor(R.color.white));
-            chip.setBackgroundColor(getResources().getColor(R.color.black));
-            chip.setCloseIconResource(R.drawable.ic_baseline_close_24);
-            chip.setTextAppearance(this, android.R.style.TextAppearance_Small);
-            chip.setCloseIconVisible(true);
-            //Added click listener on close icon to remove tag from ChipGroup
-            chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tagList.remove(tagName);
-                    chipGroup.removeView(chip);
-                }
-            });
-
-            chipGroup.addView(chip);
+/*    private void printKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA1");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("KeyHash:", e.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("KeyHash:", e.toString());
         }
-    }
+    }*/
+
 }

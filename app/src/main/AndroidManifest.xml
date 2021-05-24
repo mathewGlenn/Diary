@@ -43,9 +43,10 @@
         <activity android:name=".entries.AddEntry" />
         <activity android:name=".MainActivity2" />
         <activity android:name=".Splash" />
-        <activity android:name=".entries.EntriesList" />
+        <activity android:name=".entries.EntriesList"
+            android:launchMode = "singleTop"/>
 
-       <!-- <meta-data
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
@@ -64,8 +65,7 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>-->
-
+        </activity>
         <service
             android:name=".notification.MessagingService"
             android:exported="false">

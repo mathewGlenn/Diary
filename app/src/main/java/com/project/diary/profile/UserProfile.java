@@ -1,6 +1,7 @@
 package com.project.diary.profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -37,6 +38,8 @@ import com.project.diary.model.Profile;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -71,13 +74,21 @@ public class UserProfile extends AppCompatActivity {
            binding.countUniqueTags.setText(String.valueOf(count_unique_tags));
        }else
            binding.noTagsYet.setVisibility(View.VISIBLE);
-
-
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         user = firebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
+        Uri photoUrl = user.getPhotoUrl();
+        String strPhotoUrl = null;
+        if (photoUrl != null) {
+            strPhotoUrl = photoUrl.toString();
+        }
+        strPhotoUrl = strPhotoUrl + "?height=500";
+        Glide.with(this).load(strPhotoUrl).into(binding.imgProfilePic);
+        binding.profileName.setText(user.getDisplayName());
+        binding.emailTxt.setText(user.getEmail());
 
         Query favEntriesReference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").whereEqualTo("favorite", true);
         favEntriesReference.get().addOnCompleteListener(task -> {

@@ -6,92 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity2">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/feeling"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="feeling"
-            android:onClick="onChooseFeeling"
-            style="material"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="main act"
-            android:onClick="gotoMainAc"/>
-
-    </LinearLayout>
-
-    <com.google.android.material.chip.ChipGroup
-        style="@style/Theme.MaterialComponents"
-        android:layout_width="match_parent"
-        app:chipMinTouchTargetSize="0dp"
-        android:backgroundTint="@color/black"
-        android:layout_height="wrap_content"
-        app:chipSpacingVertical="2dp"
-        android:id="@+id/chipGroup"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="20dp"/>
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_rawRes="@raw/favorite_girl_social_media"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        android:id="@+id/lottieAnim"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create your first entry"
-        android:fontFamily="@font/montserrat_medium"
-        android:textColor="#787878"
-        app:layout_constraintTop_toBottomOf="@id/lottieAnim"
-        android:gravity="center"
-        android:id="@+id/txtCreateFirstEntry"
-        android:textSize="19sp"/>
-
-
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
