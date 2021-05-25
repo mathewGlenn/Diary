@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.Random;
 
@@ -28,73 +30,73 @@ public class UpAudio extends AppCompatActivity {
     private Button play, stop, record;
     private MediaRecorder myAudioRecorder;
     private String outputFile;
+    private String TAG = "Audio Recorder";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_up_audio);
 
-        play = (Button) findViewById(R.id.play);
-        stop = (Button) findViewById(R.id.stop);
-        record = (Button) findViewById(R.id.record);
-        stop.setEnabled(false);
-        play.setEnabled(false);
+        play = findViewById(R.id.play);
+        stop = findViewById(R.id.stop);
+        record = findViewById(R.id.record);
+        TextView txt = findViewById(R.id.txt_rec);
+
+        //stop.setEnabled(false);
+       // play.setEnabled(false);
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+      //  myAudioRecorder = new MediaRecorder();
+
+        record.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.RECORD_AUDIO },
+                        10);
+            } else {
+                startRecording();
+            }
+
+        });
+
+        stop.setOnClickListener(v ->{
+            stopRecording();
+            txt.setText("Recording Stopped");
+        });
+    }
+
+    private void startRecording(){
         myAudioRecorder = new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+
         myAudioRecorder.setOutputFile(outputFile);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
-        record.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    myAudioRecorder.prepare();
-                    myAudioRecorder.start();
-                } catch (IllegalStateException ise) {
-                    // make something ...
-                } catch (IOException ioe) {
-                    // make something
-                }
-                record.setEnabled(false);
-                stop.setEnabled(true);
-                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
-            }
-        });
+        try {
+            myAudioRecorder.prepare();
+        } catch (IOException e) {
+           Log.e(TAG, "prepare() failed");
+        }catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            Toast.makeText(getApplicationContext(), "IllegalStateException called", Toast.LENGTH_LONG).show();
+        }
+        myAudioRecorder.start();
+    }
+    private void stopRecording(){
+        myAudioRecorder.stop();
+        myAudioRecorder.release();
+        myAudioRecorder = null;
+    }
 
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (myAudioRecorder != null){
-                    try {
-                        myAudioRecorder.stop();
-                        myAudioRecorder.release();
-                    }catch (RuntimeException e){
-                        //
-                    }
-                }
-                myAudioRecorder = null;
-                record.setEnabled(true);
-                stop.setEnabled(false);
-                play.setEnabled(true);
-                Toast.makeText(getApplicationContext(), "Audio Recorder successfully", Toast.LENGTH_LONG).show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 10) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startRecording();
+            }else{
+                //User denied Permission.
             }
-        });
-
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(outputFile);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    // make something
-                }
-            }
-        });
+        }
     }
 }

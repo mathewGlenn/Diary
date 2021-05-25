@@ -20,7 +20,9 @@
         <activity android:name=".profile.EditProfile" />
         <activity android:name=".entries.ViewImage" />
         <activity android:name=".entries.EntryImages" />
-        <activity android:name=".UpAudio" />
+        <activity android:name=".UpAudio" >
+
+        </activity>
         <activity android:name=".profile.UserProfile" />
         <activity android:name=".UpImage" />
         <activity android:name=".notification.ManageNotification" />
@@ -37,7 +39,8 @@
         </activity>
         <activity android:name=".entries.FavoriteEntries" />
         <activity android:name=".authentication.Register" />
-        <activity android:name=".authentication.Login" />
+        <activity android:name=".authentication.Login"
+            android:launchMode = "singleTop"/>
         <activity android:name=".entries.EditEntry" />
         <activity android:name=".entries.EntryContent" />
         <activity android:name=".entries.AddEntry" />

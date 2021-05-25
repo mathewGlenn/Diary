@@ -303,22 +303,6 @@ public class EntriesList extends LockscreenHandler {
             // Toast.makeText(EntriesList.this, "Coming soon", Toast.LENGTH_SHORT).show();
         });
 
-/*        //display username and email on navigation header
-        View headerView = binding.navView.getHeaderView(0);
-        TextView userName = headerView.findViewById(R.id.userDisplayName);
-        TextView userEmail = headerView.findViewById(R.id.userDisplayEmail);
-
-        String udEmail, udName;
-        if (!user.isAnonymous()) {
-            udName = user.getDisplayName();
-            udEmail = user.getEmail();
-        } else {
-            udName = "Temporary account";
-            udEmail = "Sync your account to secure your data";
-        }
-
-        userName.setText(udName);
-        userEmail.setText(udEmail);*/
 
         //display user name on top of the app
         //User's Diary
