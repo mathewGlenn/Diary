@@ -1,6 +1,7 @@
 package com.project.diary.profile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -41,6 +42,17 @@ public class UserProfile extends AppCompatActivity {
     ActivityMeBinding binding;
     Intent data;
 
+    SharedPreferences sharedPreferences;
+    String userFavQuote = "";
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        userFavQuote = sharedPreferences.getString("favQuote", "Keep a diary and someday it will keep you");
+        binding.favQuote.setText(userFavQuote);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +61,7 @@ public class UserProfile extends AppCompatActivity {
         setContentView(view);
 
         data = getIntent();
+
 
         int count_all_entries = data.getIntExtra("count_all_entries", 0);
         binding.countAllEntries.setText(String.valueOf(count_all_entries));
@@ -66,13 +79,16 @@ public class UserProfile extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        if (user.isAnonymous()){
+        if (user.isAnonymous()) {
             binding.emailTxt.setText("Connect your account to secure your data");
         }
 
-        String photoUrl = user.getPhotoUrl() + "/picture?height=500&access_token=" + AccessToken.getCurrentAccessToken().getToken();
+        if (AccessToken.getCurrentAccessToken() != null){
+            String  photoUrl = user.getPhotoUrl() + "/picture?height=500&access_token=" + AccessToken.getCurrentAccessToken().getToken();
+            Glide.with(this).load(photoUrl).into(binding.imgProfilePic);
+        }
 
-        Glide.with(this).load(photoUrl).into(binding.imgProfilePic);
+
         binding.profileName.setText(user.getDisplayName());
         binding.emailTxt.setText(user.getEmail());
 
@@ -189,7 +205,7 @@ public class UserProfile extends AppCompatActivity {
             chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
             chip.setText(tagName);
             chip.setChipBackgroundColorResource(R.color.chip);
-            chip.setTextColor(getResources().getColor(R.color.foreground));
+            chip.setTextColor(getResources().getColor(R.color.white));
             chip.setEnsureMinTouchTargetSize(false);
 
             chip.setOnClickListener(v -> {
@@ -200,5 +216,9 @@ public class UserProfile extends AppCompatActivity {
 
             chipGroup.addView(chip);
         }
+    }
+
+    public void closeActivity(View view) {
+        finish();
     }
 }

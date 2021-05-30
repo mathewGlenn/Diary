@@ -16,6 +16,7 @@
 
 
         <ImageButton
+            android:onClick="closeActivity"
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +87,7 @@
                         android:layout_height="60dp"
                         android:background="@drawable/profile_border"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/person"
+                        android:src="@drawable/pp_gray"
 
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -115,7 +116,10 @@
 
                     <TextView
                         android:id="@+id/fav_quote"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/baby_girl"
@@ -239,6 +243,7 @@
                         android:textSize="15sp"
                         android:fontFamily="@font/montserrat_medium"
                         android:visibility="gone"
+                        android:textColor="@color/primary"
                         android:text="No tags used on any entries"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="20dp"
@@ -252,7 +257,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                app:cardBackgroundColor="@color/background">
+                app:cardBackgroundColor="@color/foreground">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -446,7 +451,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                app:cardBackgroundColor="@color/background"
+                app:cardBackgroundColor="@color/foreground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"

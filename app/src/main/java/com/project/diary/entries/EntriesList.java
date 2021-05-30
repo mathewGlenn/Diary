@@ -1,6 +1,7 @@
 package com.project.diary.entries;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,26 +20,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.login.LoginManager;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.auth.User;
-import com.project.diary.ToggleDarkMode;
-import com.project.diary.model.Feelings;
-import com.project.diary.model.UniqueTags;
-import com.project.diary.profile.UserProfile;
 import com.project.diary.R;
 import com.project.diary.Splash;
+import com.project.diary.ToggleDarkMode;
 import com.project.diary.app_lock.ManageDiaryLock;
 import com.project.diary.authentication.Login;
 import com.project.diary.authentication.Register;
 import com.project.diary.databinding.ActivityMainBinding;
 import com.project.diary.model.Entry;
+import com.project.diary.model.Feelings;
+import com.project.diary.model.UniqueTags;
+import com.project.diary.profile.UserProfile;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -57,7 +53,10 @@ public class EntriesList extends LockscreenHandler {
     //for the nav_view
     private DrawerLayout drawerLayout;
     //
+    static SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
 
+    String cryptedA, verifyQ;
     private ActivityMainBinding binding;
 
     RecyclerView entriesList;
@@ -79,8 +78,35 @@ public class EntriesList extends LockscreenHandler {
         View view = binding.getRoot();
         setContentView(view);
 
+        sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        cryptedA = sharedPreferences.getString("bcryptAnswer", ".");
+
         EasyLock.setBackgroundColor(R.color.background);
         EasyLock.checkPassword(this);
+/*        EasyLock.forgotPassword(v -> {
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View view1 = layoutInflater.inflate(R.layout.layout_forgot_password, null);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
+            builder.setView(view1);
+            EditText answer = view1.findViewById(R.id.editQuestion);
+            builder.setCancelable(false)
+                    .setTitle("Security Question")
+                    .setPositiveButton("Verify", (dialog, which) -> {
+
+                        verifyQ = answer.getText().toString();
+                        BCrypt.Result result = BCrypt.verifyer().verify(verifyQ.toCharArray(), cryptedA);
+
+                        if (result.verified){
+                            EasyLock.disablePassword(this, EntriesList.class);
+                            EasyLock.setPassword(this, EntriesList.class);
+                            finish();
+                        }else {
+                            Toast.makeText(this, "Wrong answer", Toast.LENGTH_SHORT).show();
+                        }
+                    }).setNeutralButton("Cancel", (dialog, which) -> dialog.cancel());
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });*/
 
 
         firestore = FirebaseFirestore.getInstance();
@@ -278,7 +304,7 @@ public class EntriesList extends LockscreenHandler {
                 checkUser();
             } else if (item.getItemId() == R.id.diary_lock) {
                 startActivity(new Intent(getApplicationContext(), ManageDiaryLock.class));
-            }else if (item.getItemId() == R.id.darkmode) {
+            } else if (item.getItemId() == R.id.darkmode) {
                 startActivity(new Intent(getApplicationContext(), ToggleDarkMode.class));
             }
 

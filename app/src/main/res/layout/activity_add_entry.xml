@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".entries.AddEntry"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".entries.AddEntry">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_loading"
@@ -30,12 +30,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:onClick="closeActivity"
             android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/transparrent"
+            android:onClick="closeActivity"
             android:src="@drawable/ic_baseline_close_24"
             android:tint="@color/primary"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,10 +60,10 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="25dp"
-            android:tint="@color/primary"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
             android:src="@drawable/tag_button"
+            android:tint="@color/primary"
             app:layout_constraintBottom_toBottomOf="@id/btn_save"
             app:layout_constraintEnd_toStartOf="@id/btn_save"
             app:layout_constraintTop_toTopOf="@id/btn_save" />
@@ -75,8 +75,8 @@
             android:layout_marginEnd="20dp"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
-            android:tint="@color/primary"
             android:src="@drawable/img_button"
+            android:tint="@color/primary"
             app:layout_constraintBottom_toBottomOf="@id/btn_tags"
             app:layout_constraintEnd_toStartOf="@id/btn_tags"
             app:layout_constraintTop_toTopOf="@id/btn_tags" />
@@ -88,8 +88,9 @@
             android:layout_marginEnd="18dp"
             android:background="@color/transparrent"
             android:scaleType="fitXY"
-            android:tint="@color/primary"
             android:src="@drawable/voice_rec_button"
+            android:tint="@color/primary"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/btn_img"
             app:layout_constraintEnd_toStartOf="@id/btn_img"
             app:layout_constraintTop_toTopOf="@id/btn_img" />
@@ -138,9 +139,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/secondary"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="5:07 PM"
+                        android:textColor="@color/secondary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -159,9 +160,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:textColor="@color/secondary"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Tue, 30 Mar, 2021"
+                        android:textColor="@color/secondary"
                         app:layout_constraintBottom_toBottomOf="@id/lineSep"
                         app:layout_constraintStart_toEndOf="@id/lineSep"
                         app:layout_constraintTop_toTopOf="@id/lineSep" />
@@ -194,20 +195,19 @@
                         style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/secondary"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="16dp"
                         android:background="@color/transparrent"
                         android:fontFamily="@font/montserrat_semi_bold"
                         android:hint="Title"
                         android:textColor="@color/primary"
+                        android:textColorHint="@color/secondary"
+                        android:textCursorDrawable="@null"
                         android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/lineSep" />
 
                     <EditText
-                        android:textColorHint="@color/secondary"
-                        android:textColor="@color/primary"
                         android:id="@+id/entry_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -218,6 +218,9 @@
                         android:hint="Write your story here..."
                         android:lineSpacingExtra="10dp"
                         android:paddingBottom="50dp"
+                        android:textColor="@color/primary"
+                        android:textColorHint="@color/secondary"
+                        android:textCursorDrawable="@null"
                         android:textSize="15sp"
                         app:layout_constraintTop_toBottomOf="@id/entry_title" />
 

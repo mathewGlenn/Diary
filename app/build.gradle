@@ -80,6 +80,8 @@ dependencies {
     //try
     implementation 'com.github.thealeksandr:PFLockScreen-Android:1.0.0-beta7'
 
+    //bcrypt
+    implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
 
 }
 

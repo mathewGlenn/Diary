@@ -13,6 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:elevation="1dp">
         <ImageButton
+            android:onClick="closeActivity"
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,7 +66,7 @@
             android:adjustViewBounds="true"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_heart_gray_1"
-            android:tint="@color/primary"
+            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -78,7 +79,7 @@
             android:adjustViewBounds="true"
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_baseline_delete_24"
-            android:tint="@color/primary"
+            android:tint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/btnHeart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -92,7 +93,7 @@
             android:adjustViewBounds="true"
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_baseline_share_24"
-            android:tint="@color/primary"
+            android:tint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/btn_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"

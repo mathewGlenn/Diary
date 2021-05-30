@@ -55,8 +55,7 @@ public class ViewImage extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
+    public void closeActivity(View view) {
         finish();
     }
 }

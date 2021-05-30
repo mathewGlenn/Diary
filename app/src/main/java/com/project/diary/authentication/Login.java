@@ -1,14 +1,14 @@
 package com.project.diary.authentication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -16,16 +16,13 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.project.diary.MainActivity2;
-import com.project.diary.R;
 import com.project.diary.Splash;
 import com.project.diary.databinding.ActivityLoginBinding;
 import com.project.diary.entries.EntriesList;
@@ -62,7 +59,7 @@ public class Login extends AppCompatActivity {
             String lEmail = binding.editEmail.getText().toString();
             String lPassword = binding.editPassword.getText().toString();
 
-            if (lEmail.isEmpty() || lPassword.isEmpty()){
+            if (lEmail.isEmpty() || lPassword.isEmpty()) {
                 Toast.makeText(Login.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -99,7 +96,23 @@ public class Login extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError:" + error);
-                Toast.makeText(Login.this, "error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "error logging in ", Toast.LENGTH_SHORT).show();
+                binding.txtError.setText(error.toString());
+            }
+        });
+
+        binding.btnForgotPass.setOnClickListener(v -> {
+            if (binding.editEmail.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Enter your email", Toast.LENGTH_SHORT).show();
+            } else {
+                auth.sendPasswordResetEmail(binding.editEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.e("ForgotPassword", "Email sent");
+                        }
+                    }
+                });
             }
         });
 
@@ -156,16 +169,12 @@ public class Login extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), EntriesList.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(Login.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(Login.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     public void createAccount(View view) {
         finish();
         startActivity(new Intent(this, Register.class));
     }
+
 }

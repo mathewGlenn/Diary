@@ -1,18 +1,15 @@
 package com.project.diary.app_lock;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.project.diary.R;
 import com.project.diary.databinding.ActivityManageDiaryLockBinding;
-import com.project.diary.entries.EntriesList;
 
 import p32929.easypasscodelock.Utils.EasyLock;
 import p32929.easypasscodelock.Utils.LockscreenHandler;
@@ -105,5 +102,9 @@ public class ManageDiaryLock extends LockscreenHandler {
         EasyLock.setBackgroundColor(R.color.background);
         EasyLock.changePassword(ManageDiaryLock.this, ManageDiaryLock.class);
         finish();
+    }
+
+    public void setSecurityQuestion(View view) {
+        startActivity(new Intent(this, SetSecurityQuestion.class));
     }
 }

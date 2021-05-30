@@ -89,7 +89,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
         data = getIntent();
 
-       allUniqueTags = data.getStringArrayListExtra("unique_tags");
+        allUniqueTags = data.getStringArrayListExtra("unique_tags");
 
 
         choose_feeling = binding.btnEmoji;
@@ -145,14 +145,14 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
             DocumentReference reference = firestore.collection("allEntries").document(user.getUid()).collection("userEntries").document();
             counterReference = firestore.collection("allEntries").document(user.getUid()).collection("counters").document("feeling_counters");
-             tagsReference = firestore.collection("allEntries").document(user.getUid()).collection("tags").document("unique_tags");
+            tagsReference = firestore.collection("allEntries").document(user.getUid()).collection("tags").document("unique_tags");
 
 
             //////////////////////
 
             if (filePath != null) {
 
-                 imageName = UUID.randomUUID().toString();
+                imageName = UUID.randomUUID().toString();
                 StorageReference storReference = storageReference.child("images/users/" + user.getUid() + "/" + imageName);
 
                 final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -166,16 +166,16 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                     double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
                     progressDialog.setMessage("Uploaded " + (int) progress + "%");
                 }).continueWithTask(task -> {
-                    if (!task.isSuccessful()){
-                        throw  task.getException();
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
                     }
                     return storReference.getDownloadUrl();
                 }).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         imgLink = downloadUri.toString();
 
-                        Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink,imageName, arrListTags, addEntryAsFavorite);
+                        Entry entry = new Entry(entry_title, entry_content, entry_date_time, userFeeling, imgLink, imageName, arrListTags, addEntryAsFavorite);
 
                         reference.set(entry).addOnSuccessListener(aVoid -> {
                             Toast.makeText(getApplicationContext(), "Save successful", Toast.LENGTH_LONG).show();
@@ -186,11 +186,10 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                         });
                         incrementFeelingCounter();
                         updateUniqueTags();
-                    }else {
+                    } else {
                         Toast.makeText(AddEntry.this, "An error has occured", Toast.LENGTH_SHORT).show();
                     }
                 });
-
 
 
             } else {
@@ -324,11 +323,10 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.removeImage){
+                        if (item.getItemId() == R.id.removeImage) {
                             binding.img.setVisibility(View.GONE);
                             filePath = null;
-                        }
-                        else if (item.getItemId() == R.id.changeImage){
+                        } else if (item.getItemId() == R.id.changeImage) {
                             chooseImage();
                         }
 
@@ -336,7 +334,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
                     }
                 });
                 popupMenu.show();
-                return  true;
+                return true;
             }
         });
 
@@ -449,7 +447,6 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
     }
 
 
-
     // Fire Storage
 
     @Override
@@ -475,7 +472,7 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
 
     }
 
-    public void incrementFeelingCounter(){
+    public void incrementFeelingCounter() {
         switch (userFeeling) {
             case "happy":
                 counterReference.update("happy", FieldValue.increment(1));
@@ -498,11 +495,11 @@ public class AddEntry extends AppCompatActivity implements EmojiDialog.EmojiDial
         }
     }
 
-    public void updateUniqueTags(){
+    public void updateUniqueTags() {
 
-      for (int i = 0; i<arrListTags.size(); i++){
-          tagsReference.update("unique_tags", FieldValue.arrayUnion(arrListTags.get(i)));
-      }
+        for (int i = 0; i < arrListTags.size(); i++) {
+            tagsReference.update("unique_tags", FieldValue.arrayUnion(arrListTags.get(i)));
+        }
     }
 
     public void closeActivity(View view) {
